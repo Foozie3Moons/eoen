@@ -1,19 +1,24 @@
 require('dotenv').config();
 var express = require('express');
-var ejsLayouts = require('express-ejs-layouts');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var flash = require('connect-flash');
 var isLoggedIn = require('./middleware/isLoggedIn');
+var sass = require('node-sass');
+var glob = require('glob');
+var fs = require('fs');
+var path = require('path');
 
 var app = express();
 
-app.set('view engine', 'ejs');
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, '/views'));
+app.set('view options', {
+  layout: false // pug has default layout functionality
+});
 
 app.use(require('morgan')('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(ejsLayouts);
-
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -39,6 +44,8 @@ var passport = require('./config/ppConfig')
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(express.static(__dirname + '/public/'));
 
 app.get('/', function(req, res) {
   res.render('index');

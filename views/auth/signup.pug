@@ -1,0 +1,11 @@
+form(action='/auth/signup', method='POST')
+  .form-group
+    label(for='authEmail') Email
+    input#authEmail.form-control(type='email', name='email')
+  .form-group
+    label(for='authName') Name
+    input#authName.form-control(type='text', name='name')
+  .form-group
+    label(for='authPassword') Password
+    input#authPassword.form-control(type='password', name='password')
+  input.btn.btn-primary(type='submit')
