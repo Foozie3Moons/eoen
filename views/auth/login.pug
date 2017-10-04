@@ -1,23 +1,25 @@
 include ../layout
 
-.ui.middle.aligned.center.aligned.grid
-  .column
-    h2.ui.teal.image.header
-      img.image(src='assets/images/logo.png')
-      .content
-        | Log-in to your account
-    form.ui.large.form(action='/auth/login', method='POST')
-      .ui.stacked.segment
-        .field
-          .ui.left.icon.input
-            i.user.icon
-            input#authEmail(type='text', name='email', placeholder='E-mail address')
-        .field
-          .ui.left.icon.input
-            i.lock.icon
-            input#authPassword(type='password', name='password', placeholder='Password')
-        .ui.fluid.large.teal.submit.button Login
-      .ui.error.message
-    .ui.message
-      | New to us? 
-      a(href='#') Sign Up
+block content
+  .ui.middle.aligned.center.aligned.grid
+    .column
+      h2.ui.orange.image.header
+        .content
+          | Log-in to your account
+      form.ui.large.form(action='/auth/login', method='POST')
+        .ui.stacked.segment
+          .field
+            .ui.left.icon.input
+              i.user.icon
+              input#authEmail(type='text', name='email', placeholder='E-mail address')
+          .field
+            .ui.left.icon.input
+              i.lock.icon
+              input#authPassword(type='password', name='password', placeholder='Password')
+          input.ui.fluid.large.orange.submit.button(type='submit', value='Login') 
+        include ../partials/alerts
+      .ui.message
+        | New to us? 
+        a(href='/auth/signup') Sign Up
+
+  

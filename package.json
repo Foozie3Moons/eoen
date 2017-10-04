@@ -1,9 +1,10 @@
 {
-  "name": "auth-boilerplate",
+  "name": "eoen",
   "version": "1.0.0",
   "main": "index.js",
+  "repository": "git@github.com:Foozie3Moons/eoen.git",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "lint:js": "node_modules/eslint/bin/eslint.js ./ ./**/*.js --fix; exit 0",
     "lint:css": "node_modules/csslint/cli.js public/css/; exit 0",
     "test": "NODE_ENV=test node_modules/mocha/bin/mocha"
@@ -25,6 +26,8 @@
     "bcrypt": "^1.0.3",
     "body-parser": "^1.15.1",
     "connect-flash": "^0.1.1",
+    "d3": "^4.11.0",
+    "d3-collection": "^1.0.4",
     "dotenv": "^4.0.0",
     "express": "^4.13.4",
     "express-session": "^1.15.6",

@@ -1,11 +1,28 @@
-form(action='/auth/signup', method='POST')
-  .form-group
-    label(for='authEmail') Email
-    input#authEmail.form-control(type='email', name='email')
-  .form-group
-    label(for='authName') Name
-    input#authName.form-control(type='text', name='name')
-  .form-group
-    label(for='authPassword') Password
-    input#authPassword.form-control(type='password', name='password')
-  input.btn.btn-primary(type='submit')
+include ../layout
+
+block content
+  
+  .ui.middle.aligned.center.aligned.grid
+    .column
+      h2.ui.orange.image.header
+        .content
+          | Log-in to your account
+      form.ui.large.form(method='POST' action='/auth/signup')
+        .ui.stacked.segment
+          .field
+            .ui.left.icon.input
+              i.mail.icon
+              input#authEmail(type='text', name='email', placeholder='E-mail address')
+          .field
+            .ui.left.icon.input
+              i.user.icon
+              input#authName(type='text', name='name', placeholder='Name')
+          .field
+            .ui.left.icon.input
+              i.lock.icon
+              input#authPassword(type='password', name='password', placeholder='Password')
+          input.ui.fluid.large.orange.submit.button(type='submit', value='Signup') 
+        include ../partials/alerts
+      .ui.message
+        | Already have an account? 
+        a(href='/auth/login') Log in

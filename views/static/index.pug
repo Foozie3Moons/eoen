@@ -1,4 +1,4 @@
-html
+html.mdc-typography(lang='en')
   head
     meta(charset='utf-8')
     meta(name="viewport" content="width=device-width,initial-scale=1")
@@ -7,53 +7,37 @@ html
     link(rel='stylesheet' href='/css/custom.css')
     
   body
-    .ui.container
-      .ui.large.secondary.inverted.pointing.menu
-        a.toc.item
-          i.sidebar.icon
-        a.active.item 
-          | Home
-        a.item 
-          | Demo
-        .right.item
-          a.ui.inverted.button(href='/auth/login') 
-            | Log in
-          a.ui.inverted.button(href='/auth/signup') 
-            | Sign Up
-
-    // Following Menu
-    .ui.large.top.fixed.hidden.menu
-      .ui.container
-        a.active.item(href='/') Home
-        a.item(href='/demo') Demo
-        .right.menu
-          .item
-            a.ui.button(href='/auth/login') Log in
-          .item
-            a.ui.primary.button(href='/auth/signup') Sign Up
-
     // Sidebar Menu
-    .ui.vertical.inverted.sidebar.menu
+    .ui.vertical.inverted.sidebar.menu.left
       a.active.item(href='/') Home
       a.item(href='/demo') Demo
       a.item(href='/auth/login') Login
       a.item(href='/auth/signup') Signup
+
     .pusher
+      // Following Menu
+      .ui.large.top.fixed.hidden.menu
+        .ui.container
+          a.active.item(href='/') Home
+          a.item(href='/demo') Demo
+          .right.menu
+            .item
+              a.ui.button(href='/auth/login') Log in
+            .item
+              a.ui.primary.button(href='/auth/signup') Sign Up
+
       // Page Contents
+
       .ui.inverted.vertical.masthead.center.aligned.segment
         .ui.container
           .ui.large.secondary.inverted.pointing.menu
             a.toc.item
               i.sidebar.icon
-            a.active.item 
-              | Home
-            a.item 
-              | Demo
+            a.item.active(href='/') Home
+            a.item(href='/demo') Demo
             .right.item
-              a.ui.inverted.button(href='/auth/login') 
-                | Log in
-              a.ui.inverted.button(href='/auth/signup') 
-                | Sign Up
+              a.ui.inverted.button(href='/auth/login') Log in
+              a.ui.inverted.button(href='/auth/signup') Sign Up
 
         .ui.text.container
           h1.ui.inverted.header
@@ -94,7 +78,7 @@ html
               a.ui.huge.black.button(href='/demo') Check It Out
       .ui.inverted.vertical.footer.segment
         .ui.container
-          .ui.stackable.inverted.divided.equal.height.stackable.grid
+          .ui.stackable.inverted.divided.equal.height.stackable.center.aligned.grid
             .three.wide.column
               h4.ui.inverted.header About
               .ui.inverted.link.list
@@ -114,8 +98,6 @@ html
               p
                 | Extra space for a call to action inside the footer that could help re-engage users.
 
-
     script(src='https://code.jquery.com/jquery-3.1.1.min.js', integrity='sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=', crossorigin='anonymous')
-    script(src='semantic/dist/semantic.min.js')
+    script(src='/semantic/dist/semantic.min.js')
     script(src='/js/sidebar.js')
-'

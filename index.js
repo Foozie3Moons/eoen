@@ -4,10 +4,8 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var flash = require('connect-flash');
 var isLoggedIn = require('./middleware/isLoggedIn');
-var sass = require('node-sass');
-var glob = require('glob');
-var fs = require('fs');
 var path = require('path');
+var d3 = require('d3');
 
 var app = express();
 
@@ -47,12 +45,21 @@ app.use(passport.session());
 
 app.use(express.static(__dirname + '/public/'));
 
+app.get('/*', function(req, res, next){
+  res.setHeader('Last-Modified', (new Date()).toUTCString());
+  next();
+});
+
 app.get('/', function(req, res) {
-  res.render('index');
+  res.render('static/index');
 });
 
 app.get('/profile', isLoggedIn, function(req, res) {
   res.render('profile');
+});
+
+app.get('/demo', function(req, res) {
+  res.render('demo');
 });
 
 app.use('/auth', require('./controllers/auth'));
