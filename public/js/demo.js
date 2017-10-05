@@ -12,6 +12,12 @@ var svg = d3.select('body').select('svg');
 var innerWidth  = svg.style('width').replace("px", "")  - margin.left - margin.right;
 var innerHeight = svg.style('height').replace("px", "") - margin.top  - margin.bottom;
 
+var xAxisLabelText = "Time";
+var xAxisLabelOffset = 48;
+
+var yAxisLabelText = "Population";
+var yAxisLabelOffset = 10;
+
 var g = svg.append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var xAxisG = g.append("g")
@@ -41,7 +47,7 @@ var colorLegend = d3.legend.color()
   .shapeHeight(15)
   .labelOffset(4);
 
-function render(data){
+function renderGrouped(data){
 
   var nested = d3.nest()
     .key(function (d){ return d[layerColumn]; })
@@ -97,49 +103,140 @@ function render(data){
   colorLegendG.call(colorLegend);
 }
 
+function renderStacked(data) {
+
+  var nested = d3.nest()
+    .key(function (d){ return d[layerColumn]; })
+    .entries(data)
+
+  var stack = d3.layout.stack()
+    .y(function (d){ return d[yColumn]; })
+    .values(function (d){ return d.values; });
+
+  var layers = stack(nested);
+
+  xScale.domain(layers[0].values.map(function (d){
+    return d[xColumn];
+  }));
+
+  yScale.domain([
+    0,
+    d3.max(layers, function (layer){
+      return d3.max(layer.values, function (d){
+        return d.y0 + d.y;
+      });
+    })
+  ]);
+
+  colorScale.domain(layers.map(function (layer){
+    return layer.key;
+  }));
+
+  xAxisG.call(xAxis);
+  yAxisG.call(yAxis);
+
+  var layerGroups = g.selectAll(".layer").data(layers);
+  layerGroups.enter().append("g").attr("class", "layer");
+  layerGroups.exit().remove();
+  layerGroups.style("fill", function (d){
+    return colorScale(d.key);
+  });
+
+  var bars = layerGroups.selectAll("rect").data(function (d){
+    return d.values;
+  });
+  bars.enter().append("rect")
+  bars.exit().remove();
+  bars
+    .attr("x", function (d){ return xScale(d[xColumn]); })
+    .attr("y", function (d){ return yScale(d.y0 + d.y); })
+    .attr("width", xScale.rangeBand())
+    .attr("height", function (d){ return innerHeight - yScale(d.y); })
+}
+
+var data = [];
 $('.submit').on('click', function() {
-  var data = [];
+  data = [];
   var submitted = {};
   $('form#loan').serializeArray().map(function(x){submitted[x.name] = x.value;});
-  var getPayment = function(rate, n, loanAmount) {
-    return (rate / (1 - Math.pow((1 + rate), -n)) * loanAmount)
+  function toCurrency(float) {
+    return parseFloat(parseFloat(Math.round(float * 100) / 100).toFixed(2));
   }
-  var n = submitted.lifeOfLoan * 12;
-  // console.log(n);
-  var loanAmount = parseInt(submitted.loanAmount * 100 - submitted.downPayment * 100);
-  // console.log(loanAmount);
-  var rate = submitted.interestRate / 12;
-  // console.log(rate);
-  var monthlyPayment = parseInt(getPayment(rate, n, loanAmount));
-  // console.log(monthlyPayment);
-  var paymentSchedule = [];
-  var paymentNumber = 1;
-  var year = 0;
-  while (loanAmount > 0) {
-    var interest = loanAmount * rate;
-    var principle = monthlyPayment - interest;
-    if (data.filter(function(e) {e.year === year}).length > 0) {
+  function getPayment(rate, n, loanAmount) {
+    return toCurrency(rate / (1 - Math.pow((1 + rate), -n)) * loanAmount);
+  }
+  var lifeOfLoan = submitted.lifeOfLoan,
+      n = lifeOfLoan * 12,
+      downPayment = submitted.downPayment,
+      loanAmount = submitted.loanAmount - downPayment,
+      apr = submitted.apr,
+      mapr = apr / 100 / 12,
+      monthlyPayment = getPayment(mapr, n, loanAmount),
+      paymentNumber = 1,
+      year = 1,
+      yearlyInterest = 0,
+      yearlyPrinciple = 0;
+  console.log("paymentNumber: ",
+              paymentNumber,
+              "year: ",
+              year,
+              ", loanAmount: ",
+              loanAmount,
+              ", monthlyPayment: ",
+              monthlyPayment,
+              ", APR: ",
+              apr,
+              ", MAPR: ",
+              mapr);
+
+  var yearlyInterest = 0;
+  var yearlyPrinciple = 0;
+  while (paymentNumber < n) {
+    loanAmount = toCurrency(loanAmount);
+    var monthlyInterest = loanAmount * mapr;
+    monthlyInterest = toCurrency(monthlyInterest);
+    var monthlyPrinciple = monthlyPayment - monthlyInterest;
+    yearlyInterest += monthlyInterest;
+    yearlyPrinciple += monthlyPrinciple;
+    paymentNumber += 1;
+    loanAmount += monthlyInterest;
+    loanAmount -= monthlyPayment;
+    if (paymentNumber % 12 === 1) {
+      console.log("paymentNumber: ",
+                  paymentNumber,
+                  "year: ",
+                  year,
+                  ", loanAmount: ",
+                  loanAmount,
+                  ", monthlyPayment: ",
+                  monthlyPayment,
+                  ", APR: ",
+                  apr,
+                  ", MAPR: ",
+                  mapr);
       data.push({
         year: year,
         paymentType: 'interest',
-        amount: interest
-      }, {
+        amount: yearlyInterest
+      },
+      {
         year: year,
         paymentType: 'principle',
-        amount: principle
+        amount: yearlyPrinciple
       });
-    } else {
-      yearlyInterest = data.filter(function(e) {e.year === year && paymentType === 'interest'});
-      yearlyPrinciple = data.filter(function(e) {e.year === year && paymentType === 'principle'});
-      yearlyInterest.amount += interest;
-      yearlyPrinciple.amount += principle;
-    }
-    console.log(loanAmount);
-    loanAmount -= monthlyPayment;
-    if (paymentNumber % 12 === 0) {
       year += 1;
+      yearlyInterest = 0;
+      yearlyPrinciple = 0;
     }
-    paymentNumber += 1;
   }
-  render(data);
+  renderGrouped(data);
 });
+console.log(data);
+$('input[type=radio][name=view]').change(function() {
+  if (this.value === 'grouped') {
+    console.log(data);
+    renderGrouped(data);
+  } else if (this.value === 'stacked') {
+    renderStacked(data);
+  }
+})

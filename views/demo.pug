@@ -3,8 +3,8 @@ include layout
 block content
   .ui.middle.aligned.center.aligned.container.demo
     .chart.ui.raised.segment.grid.center.aligned.middle.aligned
-      svg.column.fifteen.wide
-      form.ui.large.form.column#view
+      svg
+      form.ui.large.form#view
         .field
           .ui.radio.checkbox
             input#stacked(type='radio', name='view' value='stacked')
@@ -17,24 +17,24 @@ block content
       .ui.raised.segment
         .field
           .ui.left.icon.input
-            i.user.icon
-            input#loanAmount(type='number', name='loanAmount', placeholder='Loan Amount')
+            i.dollar.icon
+            input#loanAmount(type='number', name='loanAmount', placeholder='Loan Amount' value='478350')
         .field
           .ui.left.icon.input
-            i.lock.icon
-            input#interestRate(type='number', name='interestRate', placeholder='Interest Rate')
+            i.percent.icon
+            input#interestRate(type='number', name='apr', placeholder='0.0' value='4.5')
         .field
           .ui.left.icon.input
-            i.lock.icon
-            input#downPayment(type='number', name='downPayment', placeholder='Down Payment')
+            i.dollar.icon
+            input#downPayment(type='number', name='downPayment', placeholder='Down Payment' value='0')
         .field
           .ui.left.icon.input
-            i.lock.icon
-            input#lifeOfLoan(type='number', name='lifeOfLoan', placeholder='Life of Loan')
+            i.calendar.icon
+            input#lifeOfLoan(type='number', name='lifeOfLoan', placeholder='Life of Loan' value='30') 
         .ui.fluid.large.orange.submit.button(type='submit') Submit 
         include partials/alerts
 
   script(src="http://d3js.org/d3.v3.min.js" charset="utf-8")
   script(src="//cdnjs.cloudflare.com/ajax/libs/d3-legend/1.1.0/d3-legend.js")
-
+  script(src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js")
   script(src='/js/demo.js')
