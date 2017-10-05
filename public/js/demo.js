@@ -1,29 +1,4 @@
-var data = [
-  {
-    year: 0,
-    paymentType: 'principle',
-    amount: 629.92
-  },
-  {
-    year: 0,
-    paymentType: 'interest',
-    amount: 1793.81
-  },
-  {
-    year: 1,
-    paymentType: 'principle',
-    amount: 1259.94
-  },
-  {
-    year: 1,
-    paymentType: 'interest',
-    amount: 1163.79
-  }
-]
-
-var outerWidth = 500;
-var outerHeight = 250;
-var margin = { left: 90, top: 30, right: 30, bottom: 40 };
+var margin = { left: 30, top: 30, right: 30, bottom: 30 };
 var barPadding = 0.2;
 
 var xColumn = "year";
@@ -31,12 +6,12 @@ var yColumn = "amount";
 var colorColumn = "paymentType";
 var layerColumn = colorColumn;
 
-var innerWidth  = outerWidth  - margin.left - margin.right;
-var innerHeight = outerHeight - margin.top  - margin.bottom;
 
-var svg = d3.select("body").append("svg")
-  .attr("width",  outerWidth)
-  .attr("height", outerHeight);
+var svg = d3.select('body').select('svg');
+
+var innerWidth  = svg.style('width').replace("px", "")  - margin.left - margin.right;
+var innerHeight = svg.style('height').replace("px", "") - margin.top  - margin.bottom;
+
 var g = svg.append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var xAxisG = g.append("g")
@@ -122,9 +97,49 @@ function render(data){
   colorLegendG.call(colorLegend);
 }
 
-function type(d){
-  d.amount = +d.amount;
-  return d;
-}
-
-render(data);
+$('.submit').on('click', function() {
+  var data = [];
+  var submitted = {};
+  $('form#loan').serializeArray().map(function(x){submitted[x.name] = x.value;});
+  var getPayment = function(rate, n, loanAmount) {
+    return (rate / (1 - Math.pow((1 + rate), -n)) * loanAmount)
+  }
+  var n = submitted.lifeOfLoan * 12;
+  // console.log(n);
+  var loanAmount = parseInt(submitted.loanAmount * 100 - submitted.downPayment * 100);
+  // console.log(loanAmount);
+  var rate = submitted.interestRate / 12;
+  // console.log(rate);
+  var monthlyPayment = parseInt(getPayment(rate, n, loanAmount));
+  // console.log(monthlyPayment);
+  var paymentSchedule = [];
+  var paymentNumber = 1;
+  var year = 0;
+  while (loanAmount > 0) {
+    var interest = loanAmount * rate;
+    var principle = monthlyPayment - interest;
+    if (data.filter(function(e) {e.year === year}).length > 0) {
+      data.push({
+        year: year,
+        paymentType: 'interest',
+        amount: interest
+      }, {
+        year: year,
+        paymentType: 'principle',
+        amount: principle
+      });
+    } else {
+      yearlyInterest = data.filter(function(e) {e.year === year && paymentType === 'interest'});
+      yearlyPrinciple = data.filter(function(e) {e.year === year && paymentType === 'principle'});
+      yearlyInterest.amount += interest;
+      yearlyPrinciple.amount += principle;
+    }
+    console.log(loanAmount);
+    loanAmount -= monthlyPayment;
+    if (paymentNumber % 12 === 0) {
+      year += 1;
+    }
+    paymentNumber += 1;
+  }
+  render(data);
+});

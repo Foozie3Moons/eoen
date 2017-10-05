@@ -1,11 +1,38 @@
 include layout
     
 block content
-  .chart
-
-
-
-
+  .ui.middle.aligned.center.aligned.container.demo
+    .chart.ui.raised.segment.grid.center.aligned.middle.aligned
+      svg.column.fifteen.wide
+      form.ui.large.form.column#view
+        .field
+          .ui.radio.checkbox
+            input#stacked(type='radio', name='view' value='stacked')
+            label(for='stacked') Stacked
+        .field
+          .ui.radio.checkbox
+            input#grouped(type='radio', name='view', value='grouped' checked)
+            label(for='grouped') Grouped
+    form.ui.large.form#loan
+      .ui.raised.segment
+        .field
+          .ui.left.icon.input
+            i.user.icon
+            input#loanAmount(type='number', name='loanAmount', placeholder='Loan Amount')
+        .field
+          .ui.left.icon.input
+            i.lock.icon
+            input#interestRate(type='number', name='interestRate', placeholder='Interest Rate')
+        .field
+          .ui.left.icon.input
+            i.lock.icon
+            input#downPayment(type='number', name='downPayment', placeholder='Down Payment')
+        .field
+          .ui.left.icon.input
+            i.lock.icon
+            input#lifeOfLoan(type='number', name='lifeOfLoan', placeholder='Life of Loan')
+        .ui.fluid.large.orange.submit.button(type='submit') Submit 
+        include partials/alerts
 
   script(src="http://d3js.org/d3.v3.min.js" charset="utf-8")
   script(src="//cdnjs.cloudflare.com/ajax/libs/d3-legend/1.1.0/d3-legend.js")

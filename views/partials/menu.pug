@@ -1,6 +1,12 @@
 -var currentPage = 'demo';
 .ui.large.top.fixed.menu
   .ui.container
+    a.item(href='/')
+      img.logo(src='/img/logo.png')
+      span.primary 
+        | EOEN 
+      span(style='color:#000000')
+        | Mortgage
     a.item(href='/') Home
     a.item(href='/demo' class=currentPage === 'demo' ? 'active' : '') Demo
     -if (isLoggedIn) {
@@ -12,11 +18,5 @@
         a.ui.primary.button(href='/auth/signup') Sign Up
       .item
         a.ui.danger.button(href='/auth/logout') Log Out
-    -} else {
-    .right.menu
-      .item
-        a.ui.primary.button(href='/auth/signup') Sign Up
-      .item
-        a.ui.button(href='/auth/login') Log In
     -}
   

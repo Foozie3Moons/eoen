@@ -1,12 +1,14 @@
 -if (alerts.error) {
   -alerts.error.forEach(function(msg) {
-  .ui.red.message
+  .ui.red.message.bottom.attached
+    i.warning.icon
     =msg
   -});
 -}
 -if (alerts.success) { 
   -alerts.success.forEach(function(msg) {
-  .ui.green.message
+  .ui.green.message.bottom.attached
+    i.warning.icon
     =msg
   -});
 -}
