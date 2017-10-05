@@ -3,8 +3,7 @@ html.mdc-typography(lang='en')
     meta(charset='utf-8')
     meta(name="viewport" content="width=device-width,initial-scale=1")
     title Eoen Mortgage
-    link(rel='stylesheet', type='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.css')
-    link(rel='stylesheet' href='/css/custom.css')
+    include ../partials/stylesheets
     
   body
     // Sidebar Menu
@@ -98,6 +97,4 @@ html.mdc-typography(lang='en')
               p
                 | Extra space for a call to action inside the footer that could help re-engage users.
 
-    script(src='https://code.jquery.com/jquery-3.1.1.min.js', integrity='sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=', crossorigin='anonymous')
-    script(src='/semantic/dist/semantic.min.js')
-    script(src='/js/sidebar.js')
+    include ../partials/scripts
