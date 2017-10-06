@@ -1,161 +1,169 @@
-var margin = { left: 30, top: 30, right: 30, bottom: 30 };
-var barPadding = 0.2;
+d3.select("div#chart")
+    .insert("div",":first-child")
+    .classed("svg-container", true) //container class to make it responsive
+    .append("svg")
+    //responsive SVG needs these 2 attributes and no width and height attr
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "0 0 100 300")
+    //class to make it responsive
+    .classed("svg-content-responsive", true);
 
-var xColumn = "year";
-var yColumn = "amount";
-var colorColumn = "paymentType";
-var layerColumn = colorColumn;
-
-
-var svg = d3.select('body').select('svg');
-
-var innerWidth  = svg.style('width').replace("px", "")  - margin.left - margin.right;
-var innerHeight = svg.style('height').replace("px", "") - margin.top  - margin.bottom;
-
-var xAxisLabelText = "Time";
-var xAxisLabelOffset = 48;
-
-var yAxisLabelText = "Population";
-var yAxisLabelOffset = 10;
-
-var g = svg.append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-var xAxisG = g.append("g")
-  .attr("class", "x axis")
-  .attr("transform", "translate(0," + innerHeight + ")");
-var yAxisG = g.append("g")
-  .attr("class", "y axis");
-var colorLegendG = g.append("g")
-  .attr("class", "color-legend")
-  .attr("transform", "translate(235, 0)");
+var svg = d3.select("svg"),
+    margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = parseInt(d3.select('.svg-content-responsive').style('width')) - margin.left - margin.right,
+    height = parseInt(d3.select('.svg-content-responsive').style('height')) - margin.top - margin.bottom,
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      .attr('width', width);
 
 var x = d3.scaleBand()
-  .range([0, innerWidth], barPadding);
+    .rangeRound([0, width])
+    .paddingInner(0.05)
+    .align(0.1);
+
 var y = d3.scaleLinear()
-  .range([innerHeight, 0]);
+    .rangeRound([height, 0]);
 
-var color = d3.scaleOrdinal(d3.schemeCategory10);
+var z = d3.scaleOrdinal()
+    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
-xAxis = d3.select(".axis")
-    .call(d3.axisBottom(x));
-yAxis = d3.select('.axis')
-    .call(d3.axisLeft(y));
+d3.csv("../csv/data.csv", function(d, i, columns) {
+  for (i = 1, t = 0; i < columns.length; ++i) t += d[columns[i]] = +d[columns[i]];
+  d.total = t;
+  return d;
+}, function(error, data) {
+  if (error) throw error;
 
-var colorLegend = d3.legendColor()
-    .labelFormat(d3.format(".2f"))
-    .useClass(true);
+  var keys = data.columns.slice(1);
 
-function renderGrouped(data){
+  data.sort(function(a, b) { return b.total - a.total; });
+  x.domain(data.map(function(d) { return d.State; }));
+  y.domain([0, d3.max(data, function(d) { return d.total; })]).nice();
+  z.domain(keys);
 
-  var nested = d3.nest()
-    .key(function (d){ return d[layerColumn]; })
-    .entries(data)
+  g.append("g")
+    .selectAll("g")
+    .data(d3.stack().keys(keys)(data))
+    .enter().append("g")
+      .attr("fill", function(d) { return z(d.key); })
+    .selectAll("rect")
+    .data(function(d) { return d; })
+    .enter().append("rect")
+      .attr("x", function(d) { return x(d.data.State); })
+      .attr("y", function(d) { return y(d[1]); })
+      .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+      .attr("width", x.bandwidth());
 
-  var stack = d3.stack()
-    .keys(['paymentType', 'amount'])
-    .order(d3.stackOrderNone)
-    .offset(d3.stackOffsetNone);
+  g.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
 
-  var layers = stack(nested);
+  g.append("g")
+      .attr("class", "axis")
+      .call(d3.axisLeft(y).ticks(null, "s"))
+    .append("text")
+      .attr("x", 2)
+      .attr("y", y(y.ticks().pop()) + 0.5)
+      .attr("dy", "0.32em")
+      .attr("fill", "#000")
+      .attr("font-weight", "bold")
+      .attr("text-anchor", "start")
+      .text("Population");
 
-  x.domain(layers.map(function (d){
-    return d[xColumn];
-  }));
+  var legend = g.append("g")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 10)
+      .attr("text-anchor", "end")
+    .selectAll("g")
+    .data(keys.slice().reverse())
+    .enter().append("g")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
-  // y.domain([
-  //   0,
-  //   d3.max(layers, function (layer){
-  //     return d3.max(layer.values, function (d){
-  //       return d.y;
-  //     });
-  //   })
-  // ]);
+  legend.append("rect")
+      .attr("x", width - 19)
+      .attr("width", 19)
+      .attr("height", 19)
+      .attr("fill", z);
 
-  color.domain(layers.map(function (layer){
-    return layer.key;
-  }));
+  legend.append("text")
+      .attr("x", width - 24)
+      .attr("y", 9.5)
+      .attr("dy", "0.32em")
+      .text(function(d) { return d; });
+});
 
-  // xAxisG.call(xAxis);
-  // yAxisG.call(yAxis);
+function renderStacked(csv) {
 
-  var layers = g.selectAll(".layer").data(layers);
-  layers.enter().append("g").attr("class", "layer");
-  layers.exit().remove();
-  layers.style("fill", function (d){
-    return colorScale(d.key);
+  d3.csv('../csv/data.csv', function(d, i, columns) {
+    for (i = 1, t = 0; i < columns.length; ++i) t += d[columns[i]] = +d[columns[i]];
+    d.total = t;
+    return d;
+  }, function(error, data) {
+    if (error) throw error;
+
+    var keys = data.columns.slice(1);
+
+    data.sort(function(a, b) { return b.total - a.total; });
+    x.domain(data.map(function(d) { return d.State; }));
+    y.domain([0, d3.max(data, function(d) { return d.total; })]).nice();
+    z.domain(keys);
+
+    g.append("g")
+      .selectAll("g")
+      .data(d3.stack().keys(keys)(data))
+      .enter().append("g")
+        .attr("fill", function(d) { return z(d.key); })
+      .selectAll("rect")
+      .data(function(d) { return d; })
+      .enter().append("rect")
+        .attr("x", function(d) { return x(d.data.State); })
+        .attr("y", function(d) { return y(d[1]); })
+        .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+        .attr("width", x.bandwidth());
+
+    g.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+    g.append("g")
+        .attr("class", "axis")
+        .call(d3.axisLeft(y).ticks(null, "s"))
+      .append("text")
+        .attr("x", 2)
+        .attr("y", y(y.ticks().pop()) + 0.5)
+        .attr("dy", "0.32em")
+        .attr("fill", "#000")
+        .attr("font-weight", "bold")
+        .attr("text-anchor", "start")
+        .text("Population");
+
+    var legend = g.append("g")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", 10)
+        .attr("text-anchor", "end")
+      .selectAll("g")
+      .data(keys.slice().reverse())
+      .enter().append("g")
+        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+    legend.append("rect")
+        .attr("x", width - 19)
+        .attr("width", 19)
+        .attr("height", 19)
+        .attr("fill", z);
+
+    legend.append("text")
+        .attr("x", width - 24)
+        .attr("y", 9.5)
+        .attr("dy", "0.32em")
+        .text(function(d) { return d; });
   });
-
-  var bars = layers.selectAll("rect").data(function (d){
-    return d.values;
-  });
-  var barWidth = x.bandWidth() / colorScale.domain().length;
-  bars.enter().append("rect")
-  bars.exit().remove();
-  bars
-    .attr("x", function (d, i, j){
-      return x(d[xColumn]) + barWidth * j;
-    })
-    .attr("y", function (d){ return y(d.y); })
-    .attr("width", barWidth)
-    .attr("height", function (d){ return innerHeight - y(d.y); })
-
-  colorLegendG.call(colorLegend);
-}
-
-function renderStacked(data) {
-
-  var nested = d3.nest()
-    .key(function (d){ return d[layerColumn]; })
-    .entries(data)
-
-  var stack = d3.layout.stack()
-    .y(function (d){ return d[yColumn]; })
-    .values(function (d){ return d.values; });
-
-  var layers = stack(nested);
-
-  x.domain(layers[0].values.map(function (d){
-    return d[xColumn];
-  }));
-
-  y.domain([
-    0,
-    d3.max(layers, function (layer){
-      return d3.max(layer.values, function (d){
-        return d.y0 + d.y;
-      });
-    })
-  ]);
-
-  colorScale.domain(layers.map(function (layer){
-    return layer.key;
-  }));
-
-  xAxisG.call(xAxis);
-  yAxisG.call(yAxis);
-
-  var layerGroups = g.selectAll(".layer").data(layers);
-  layerGroups.enter().append("g").attr("class", "layer");
-  layerGroups.exit().remove();
-  layerGroups.style("fill", function (d){
-    return colorScale(d.key);
-  });
-
-  var bars = layerGroups.selectAll("rect").data(function (d){
-    return d.values;
-  });
-  bars.enter().append("rect")
-  bars.exit().remove();
-  bars
-    .attr("x", function (d){ return x(d[xColumn]); })
-    .attr("y", function (d){ return y(d.y0 + d.y); })
-    .attr("width", x.rangeBand())
-    .attr("height", function (d){ return innerHeight - y(d.y); })
 }
 
 var data = [];
 $('.submit').on('click', function() {
-  data = [];
+  data = [["year", "balance", "interest", "principle"]];
   var submitted = {};
   $('form#loan').serializeArray().map(function(x){submitted[x.name] = x.value;});
   function toCurrency(float) {
@@ -164,32 +172,17 @@ $('.submit').on('click', function() {
   function getPayment(rate, n, loanAmount) {
     return toCurrency(rate / (1 - Math.pow((1 + rate), -n)) * loanAmount);
   }
-  var lifeOfLoan = submitted.lifeOfLoan,
-      n = lifeOfLoan * 12,
-      downPayment = submitted.downPayment,
-      loanAmount = submitted.loanAmount - downPayment,
-      apr = submitted.apr,
-      mapr = apr / 100 / 12,
-      monthlyPayment = getPayment(mapr, n, loanAmount),
-      paymentNumber = 1,
-      year = 1,
-      yearlyInterest = 0,
+  var lifeOfLoan      = submitted.lifeOfLoan,
+      n               = lifeOfLoan * 12,
+      downPayment     = submitted.downPayment,
+      loanAmount      = submitted.loanAmount - downPayment,
+      apr             = submitted.apr,
+      mapr            = apr / 100 / 12,
+      monthlyPayment  = getPayment(mapr, n, loanAmount),
+      paymentNumber   = 1,
+      year            = 1,
+      yearlyInterest  = 0,
       yearlyPrinciple = 0;
-  console.log("paymentNumber: ",
-              paymentNumber,
-              "year: ",
-              year,
-              ", loanAmount: ",
-              loanAmount,
-              ", monthlyPayment: ",
-              monthlyPayment,
-              ", APR: ",
-              apr,
-              ", MAPR: ",
-              mapr);
-
-  var yearlyInterest = 0;
-  var yearlyPrinciple = 0;
   while (paymentNumber < n) {
     loanAmount = toCurrency(loanAmount);
     var monthlyInterest = loanAmount * mapr;
@@ -201,35 +194,26 @@ $('.submit').on('click', function() {
     loanAmount += monthlyInterest;
     loanAmount -= monthlyPayment;
     if (paymentNumber % 12 === 1) {
-      console.log("paymentNumber: ",
-                  paymentNumber,
-                  "year: ",
-                  year,
-                  ", loanAmount: ",
-                  loanAmount,
-                  ", monthlyPayment: ",
-                  monthlyPayment,
-                  ", APR: ",
-                  apr,
-                  ", MAPR: ",
-                  mapr);
-      data.push({
-        year: year,
-        paymentType: 'interest',
-        amount: yearlyInterest
-      },
-      {
-        year: year,
-        paymentType: 'principle',
-        amount: yearlyPrinciple
-      });
+      var balance = toCurrency(loanAmount);
+      var interest = toCurrency(yearlyInterest);
+      var principle = toCurrency(yearlyPrinciple);
+      data.push([year, balance, interest, principle]);
       year += 1;
       yearlyInterest = 0;
       yearlyPrinciple = 0;
     }
   }
-  renderGrouped(data);
+  console.log(data);
+  var csvContent = "data:text/csv;charset=utf-8,";
+  data.forEach(function(array, index){
+    console.log(array);
+     dataString = array.join(",");
+     csvContent += index < data.length ? dataString+ "\n" : dataString;
+
+  });
+  renderStacked(csvContent);
 });
+
 console.log(data);
 $('input[type=radio][name=view]').change(function() {
   if (this.value === 'grouped') {
