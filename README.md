@@ -82,3 +82,54 @@ Website[https://www.quandil.com]
 - Sequelize/PostgreSQL
 - Semantic UI
 - Passport
+
+## Additional Features
+
+- All loans instead of just mortgages
+  - This was realized before creating a 'mortgage' model, so the existing model should make for an easy transition.
+- Both fixed rate and adjustable rate loans/mortgages (currently only fixed rate applies)
+- Additional mortgage details:
+  - HOA Fees
+  - Private Mortgage Insurance (FHA)
+  - Homeowners insurance
+  - Property tax
+  - Tax savings - Mortgage Interest
+    - Static Values
+      - Federal Marginal Tax Rate (need current federal tax data)
+      - State Marginal Tax Rate (need current state tax data)
+    - Calculated Values
+      - Amortized tax savings
+      - Monthly tax savings
+      - Yearly tax savings
+  - Tax savings - Property Tax
+  - Total Payments
+  - Mortgage Ratios
+    - Static values
+      - Responsible party's income
+      - Any additional responsible party's income
+      - Lender Front-End
+      - Lender Back-End
+    - Calculated values
+      - Mortgage Amount
+      - Mortgage, Taxn Insurance
+      - Monthly Debts
+      - Front-End
+      - Back-End
+- Lender comparisons
+  - 30 fixed
+  - 10/1 ARM
+  - 7/1 ARM
+  - Closing Costs
+  - Lender Credit
+- Expanded payment schedule options
+- Down Payment visualization
+  - Static Values
+    - Expected Down Payment Amount
+  - Calculated Values
+    - Finding a loan amount that fits your expected down payment
+    - Home Amount / Expected Down Payment Amount = percent
+  - Need more consulting on the usefulness of this Features
+
+## Optimizations
+
+- Extract the front-end javascript data manipulation to the back-end
