@@ -6,6 +6,7 @@
   min-height: 700px;
   padding: 1em 0em;
 }
+
 .masthead .logo.item img {
   margin-right: 1em;
 }
@@ -84,7 +85,7 @@
 }
 
 body {
-  background-color: #DADADA;
+  background-color: #edf1f5;
 }
 body > .grid {
   height: 100%;
