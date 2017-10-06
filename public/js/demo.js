@@ -3,10 +3,10 @@ d3.select("div#chart")
     .classed("svg-container", true) //container class to make it responsive
     .append("svg")
     //responsive SVG needs these 2 attributes and no width and height attr
-    .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 100 300")
+      .attr("preserveAspectRatio", "xMinYMin meet")
+      .attr("viewBox", "0 0 900 300")
     //class to make it responsive
-    .classed("svg-content-responsive", true);
+      .classed("svg-content-responsive", true);
 
 var svg = d3.select("svg"),
     margin = {top: 20, right: 20, bottom: 30, left: 40},
@@ -24,20 +24,81 @@ var y = d3.scaleLinear()
     .rangeRound([height, 0]);
 
 var z = d3.scaleOrdinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+    .range(["#3B76AB", "#FF4B4B", "#3DCF3D", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+//
+// d3.csv("../csv/data.csv", function(d, i, columns) {
+//   for (i = 1, t = 0; i < columns.length; ++i) t += d[columns[i]] = +d[columns[i]];
+//   d.total = t;
+//   return d;
+// }, function(error, data) {
+//   console.log(data);
+//   if (error) throw error;
+//
+//   var keys = data.columns.slice(1);
+//   console.log(keys);
+//   data.sort(function(a, b) { return b.total - a.total; });
+//   x.domain(data.map(function(d) { return d.State; }));
+//   y.domain([0, d3.max(data, function(d) { return d.total; })]).nice();
+//   z.domain(keys);
+//
+//   g.append("g")
+//     .selectAll("g")
+//     .data(d3.stack().keys(keys)(data))
+//     .enter().append("g")
+//       .attr("fill", function(d) { return z(d.key); })
+//     .selectAll("rect")
+//     .data(function(d) { return d; })
+//     .enter().append("rect")
+//       .attr("x", function(d) { return x(d.data.State); })
+//       .attr("y", function(d) { return y(d[1]); })
+//       .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+//       .attr("width", x.bandwidth());
+//
+//   g.append("g")
+//       .attr("class", "axis")
+//       .attr("transform", "translate(0," + height + ")")
+//       .call(d3.axisBottom(x));
+//
+//   g.append("g")
+//       .attr("class", "axis")
+//       .call(d3.axisLeft(y).ticks(null, "s"))
+//     .append("text")
+//       .attr("x", 2)
+//       .attr("y", y(y.ticks().pop()) + 0.5)
+//       .attr("dy", "0.32em")
+//       .attr("fill", "#000")
+//       .attr("font-weight", "bold")
+//       .attr("text-anchor", "start")
+//       .text("Population");
+//
+//   var legend = g.append("g")
+//       .attr("font-family", "sans-serif")
+//       .attr("font-size", 10)
+//       .attr("text-anchor", "end")
+//     .selectAll("g")
+//     .data(keys.slice().reverse())
+//     .enter().append("g")
+//       .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+//
+//   legend.append("rect")
+//       .attr("x", width - 19)
+//       .attr("width", 19)
+//       .attr("height", 19)
+//       .attr("fill", z);
+//
+//   legend.append("text")
+//       .attr("x", width - 24)
+//       .attr("y", 9.5)
+//       .attr("dy", "0.32em")
+//       .text(function(d) { return d; });
+// });
 
-d3.csv("../csv/data.csv", function(d, i, columns) {
-  for (i = 1, t = 0; i < columns.length; ++i) t += d[columns[i]] = +d[columns[i]];
-  d.total = t;
-  return d;
-}, function(error, data) {
-  if (error) throw error;
+function renderStacked(csv) {
 
-  var keys = data.columns.slice(1);
+  var keys = ['balance', 'interest', 'principle'];
 
-  data.sort(function(a, b) { return b.total - a.total; });
-  x.domain(data.map(function(d) { return d.State; }));
-  y.domain([0, d3.max(data, function(d) { return d.total; })]).nice();
+  x.domain(data.map(function(d) { return d.year; }));
+  y.domain([0, d3.max(data, function(d) { return d.balance; })]).nice();
   z.domain(keys);
 
   g.append("g")
@@ -48,7 +109,7 @@ d3.csv("../csv/data.csv", function(d, i, columns) {
     .selectAll("rect")
     .data(function(d) { return d; })
     .enter().append("rect")
-      .attr("x", function(d) { return x(d.data.State); })
+      .attr("x", function(d) { return x(d.data.year); })
       .attr("y", function(d) { return y(d[1]); })
       .attr("height", function(d) { return y(d[0]) - y(d[1]); })
       .attr("width", x.bandwidth());
@@ -61,14 +122,15 @@ d3.csv("../csv/data.csv", function(d, i, columns) {
   g.append("g")
       .attr("class", "axis")
       .call(d3.axisLeft(y).ticks(null, "s"))
-    .append("text")
-      .attr("x", 2)
-      .attr("y", y(y.ticks().pop()) + 0.5)
-      .attr("dy", "0.32em")
-      .attr("fill", "#000")
-      .attr("font-weight", "bold")
-      .attr("text-anchor", "start")
-      .text("Population");
+
+  svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("Value");
+
 
   var legend = g.append("g")
       .attr("font-family", "sans-serif")
@@ -90,80 +152,11 @@ d3.csv("../csv/data.csv", function(d, i, columns) {
       .attr("y", 9.5)
       .attr("dy", "0.32em")
       .text(function(d) { return d; });
-});
-
-function renderStacked(csv) {
-
-  d3.csv('../csv/data.csv', function(d, i, columns) {
-    for (i = 1, t = 0; i < columns.length; ++i) t += d[columns[i]] = +d[columns[i]];
-    d.total = t;
-    return d;
-  }, function(error, data) {
-    if (error) throw error;
-
-    var keys = data.columns.slice(1);
-
-    data.sort(function(a, b) { return b.total - a.total; });
-    x.domain(data.map(function(d) { return d.State; }));
-    y.domain([0, d3.max(data, function(d) { return d.total; })]).nice();
-    z.domain(keys);
-
-    g.append("g")
-      .selectAll("g")
-      .data(d3.stack().keys(keys)(data))
-      .enter().append("g")
-        .attr("fill", function(d) { return z(d.key); })
-      .selectAll("rect")
-      .data(function(d) { return d; })
-      .enter().append("rect")
-        .attr("x", function(d) { return x(d.data.State); })
-        .attr("y", function(d) { return y(d[1]); })
-        .attr("height", function(d) { return y(d[0]) - y(d[1]); })
-        .attr("width", x.bandwidth());
-
-    g.append("g")
-        .attr("class", "axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x));
-
-    g.append("g")
-        .attr("class", "axis")
-        .call(d3.axisLeft(y).ticks(null, "s"))
-      .append("text")
-        .attr("x", 2)
-        .attr("y", y(y.ticks().pop()) + 0.5)
-        .attr("dy", "0.32em")
-        .attr("fill", "#000")
-        .attr("font-weight", "bold")
-        .attr("text-anchor", "start")
-        .text("Population");
-
-    var legend = g.append("g")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", 10)
-        .attr("text-anchor", "end")
-      .selectAll("g")
-      .data(keys.slice().reverse())
-      .enter().append("g")
-        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-    legend.append("rect")
-        .attr("x", width - 19)
-        .attr("width", 19)
-        .attr("height", 19)
-        .attr("fill", z);
-
-    legend.append("text")
-        .attr("x", width - 24)
-        .attr("y", 9.5)
-        .attr("dy", "0.32em")
-        .text(function(d) { return d; });
-  });
 }
 
 var data = [];
 $('.submit').on('click', function() {
-  data = [["year", "balance", "interest", "principle"]];
+  data = [];
   var submitted = {};
   $('form#loan').serializeArray().map(function(x){submitted[x.name] = x.value;});
   function toCurrency(float) {
@@ -194,24 +187,20 @@ $('.submit').on('click', function() {
     loanAmount += monthlyInterest;
     loanAmount -= monthlyPayment;
     if (paymentNumber % 12 === 1) {
-      var balance = toCurrency(loanAmount);
-      var interest = toCurrency(yearlyInterest);
-      var principle = toCurrency(yearlyPrinciple);
-      data.push([year, balance, interest, principle]);
+      data.push({
+        year: year,
+        balance: loanAmount,
+        interest: yearlyInterest,
+        principle: yearlyPrinciple
+      });
       year += 1;
       yearlyInterest = 0;
       yearlyPrinciple = 0;
     }
   }
   console.log(data);
-  var csvContent = "data:text/csv;charset=utf-8,";
-  data.forEach(function(array, index){
-    console.log(array);
-     dataString = array.join(",");
-     csvContent += index < data.length ? dataString+ "\n" : dataString;
 
-  });
-  renderStacked(csvContent);
+  renderStacked(data);
 });
 
 console.log(data);

@@ -135,10 +135,6 @@ body > .grid {
   margin-top: 5em;
 }
 
-svg {
-  width: 100%;
-  height: 300px;
-}
 .logo {
   height: 20px;
   width: 20px;
@@ -148,11 +144,11 @@ svg {
     display: inline-block;
     position: relative;
     width: 100%;
-    padding-bottom: 100%; /* aspect ratio */
+    /*padding-bottom: 100%; /* aspect ratio */*/
     vertical-align: top;
     overflow: hidden;
 }
-.svg-content-responsive {
+.svg-content {
     display: inline-block;
     position: absolute;
     top: 10px;
