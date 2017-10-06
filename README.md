@@ -57,15 +57,17 @@ Include sign up/log in functionality, with hashed passwords & an authorization f
   | GET | /auth/signup | Signup Page | Form where users can enter data to sign up for the service |
   | POST | /auth/login | Posts login information | |
   | POST | /auth/signup | Posts signup information | |
-  | GET | /users/:id | Gets user home page | User's dashboard |
-  | GET | /users/:id/account | Shows user account settings | Contains how to update their user information |
-  | GET | /users/:id/account/ | Edit page for account settings | Contains a form to edit/update user information |
-  | PUT | /users/:id/account | Updates user information from the edit/update form | |
-  | DELETE | /users/:id/account | Deletes the user's account forever | Purpose explains it pretty well |
-  | GET | /users/:id/mortgage | Get mortgage information form | Form for editing |
-  | POST | /users/:id/mortgage | Posts mortgage information for | |
-  | PUT | /users/:id/mortgage | Updates existing mortgage details | |
-  | DELETE | /users/:id/mortgage | Deletes the user's mortgage | |
+  | GET | /profile | Gets user profile page | User's dashboard |
+  | GET | /profile/account | Shows user account settings | Contains how to update their user information |
+  | GET | /profile/account | Displays user's account information | |
+  | GET | /profile/account/edit | Edit page for account settings | Contains a form to edit/update user information |
+  | PUT | /profile/account | Updates user account information and redirects to /profile/account | PUTS user information from the /profile/account/ and updates database |
+  | DELETE | /profile/account | Deletes the user's account forever and redirects to / | Purpose explains it pretty well |
+  | GET | /profile/loans | Get all loan meta information | Display basic link information for all loans including a small description of that loan, like tags (personal, mortgage, etc) |
+  | GET | /profile/loans/:loanId | Get individual loan information, including loan visualization | Display advanced information for all loans including a small description of that loan, like tags (personal, mortgage, etc) as well as the various visualizations the user can have |
+  | POST | /profile/loans | Posts loan information to server, creating a loan in the database and redirects to the created loan instance /profile/loans/:loanId | |
+  | PUT | /profile/loans/:loanId | Updates existing mortgage details and redirects to the same /profile/loans/:loanId | |
+  | DELETE | /profile/loans/:loanId | Deletes the loan from the database and redirects to /profile/loans | |
 
 ## API
 
@@ -133,3 +135,5 @@ Website[https://www.quandil.com]
 ## Optimizations
 
 - Extract the front-end javascript data manipulation to the back-end
+- Make charts more plug-and-play. Currently very specific uses.
+  - Need to redesign the data input creation from form fields as well as accessing that data in the d3 functions themselves.
