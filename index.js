@@ -3,7 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var flash = require('connect-flash');
-var isLoggedIn = require('./middleware/isLoggedIn');
+var request = require('request');
 var path = require('path');
 var d3 = require('d3');
 
@@ -51,11 +51,11 @@ app.get('/*', function(req, res, next){
 });
 
 app.get('/', function(req, res) {
-  res.render('static/index');
-});
-
-app.get('/profile', isLoggedIn, function(req, res) {
-  res.render('profile');
+  request.get("https://www.quandl.com/api/v3/datasets/FMAC/30US.json?api_key="
+      + process.env.QUANDL_API_KEY, function(error, response, body) {
+    console.log(body);
+    res.render('index.pug', {data: body});
+  });
 });
 
 app.get('/demo', function(req, res) {
@@ -63,6 +63,7 @@ app.get('/demo', function(req, res) {
 });
 
 app.use('/auth', require('./controllers/auth'));
+app.use('/user', require('./controllers/user'));
 
 var server = app.listen(process.env.PORT || 3000);
 
