@@ -23,7 +23,7 @@ router.post('/signup', function(req, res) {
       // FLASH
       passport.authenticate('local', {
         successFlash: 'Account created and logged in',
-        successRedirect: '/'
+        successRedirect: '/profile/',
       })(req, res);
     } else {
       // if not created, the email already exists
@@ -45,10 +45,11 @@ router.get('/login', function(req, res) {
 
 // FLASH
 router.post('/login', passport.authenticate('local', {
-  successRedirect: '/profile',
-  failureRedirect: '/auth/login',
-  failureFlash: 'Invalid username and/or password',
-  successFlash: 'You have logged in'
+    successRedirect: '/profile/',
+    failureRedirect: '/auth/login',
+    failureFlash: 'Invalid username and/or password',
+    successFlash: 'You have logged in'
+  });
 }));
 
 router.get('/logout', function(req, res) {

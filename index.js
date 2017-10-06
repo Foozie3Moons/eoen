@@ -63,7 +63,7 @@ app.get('/demo', function(req, res) {
 });
 
 app.use('/auth', require('./controllers/auth'));
-app.use('/user', require('./controllers/user'));
+app.use('/user', require('./controllers/profile'));
 
 var server = app.listen(process.env.PORT || 3000);
 
