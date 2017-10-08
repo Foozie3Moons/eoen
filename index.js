@@ -3,6 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var flash = require('connect-flash');
+var isLoggedIn = require('./middleware/isLoggedIn')
 var request = require('request');
 var path = require('path');
 var d3 = require('d3');
@@ -32,8 +33,8 @@ app.use(flash());
 
 app.use(function(req, res, next) {
   // before every route, attach the flash messages and current user to res.locals
+  res.locals.currentPage = req.title
   res.locals.alerts = req.flash();
-  res.locals.currentUser = req.user;
   next();
 });
 
@@ -54,16 +55,16 @@ app.get('/', function(req, res) {
   request.get("https://www.quandl.com/api/v3/datasets/FMAC/30US.json?api_key="
       + process.env.QUANDL_API_KEY, function(error, response, body) {
     console.log(body);
-    res.render('index.pug', {data: body});
+    res.render('index.pug', {data: body, session: req.session});
   });
 });
 
 app.get('/demo', function(req, res) {
-  res.render('demo');
+  res.render('demo', {loggedIn: false});
 });
 
 app.use('/auth', require('./controllers/auth'));
-app.use('/user', require('./controllers/profile'));
+app.use('/profile', require('./controllers/profile'));
 
 var server = app.listen(process.env.PORT || 3000);
 

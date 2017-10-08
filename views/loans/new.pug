@@ -1,0 +1,56 @@
+extends ../profile/index
+
+block profile
+  .ui.container
+    h1.ui.orange.header Your Loan Detials
+    form.ui.large.form#loan
+      .ui
+        .two.fields
+          .field
+            label(for='loanAmount') Loan Amount
+            .ui.left.icon.input
+              i.dollar.icon
+              input#loanAmount(type='number', name='loanAmount', placeholder='Loan Amount' value='478350')
+          .field
+            label(for='downPayment') Down Payment
+            .ui.left.icon.input
+              i.dollar.icon
+              input#downPayment(type='number', name='downPayment', placeholder='Down Payment' value='0')
+        .two.fields
+          .field
+            label(for='lifeOfLoan') Life of Loan
+            .ui.left.icon.input
+              i.calendar.icon
+              input#lifeOfLoan(type='number', name='lifeOfLoan', placeholder='Life of Loan' value='30') 
+          .field
+            label(for='paymentsPerYear') Payments Per Year
+            .ui.left.icon.input
+              i.calendar.icon
+              input#paymentsPerYear(type='number', name='paymentsPerYear', placeholder='Payments Per Year' value='12')
+        .field
+          label(for='apr') APR
+          .ui.left.icon.input
+            i.percent.icon
+            input#interestRate(type='number', name='apr', placeholder='0.0' value='4.5')
+
+        .ui.fluid.large.orange.submit.button(type='submit') Submit 
+        include ../partials/alerts
+    .row.horizontal.stripe
+      h1.ui.center.aligned.top.aligned Let's View Your Loan
+      #chart.ui.grid.center.aligned.middle.aligned
+    .ui.segment
+      form.ui.large.form#view
+        .field
+          .ui.radio.checkbox
+            input#stacked(type='radio', name='view' value='stacked')
+            label(for='stacked') Stacked
+        .field
+          .ui.radio.checkbox
+            input#grouped(type='radio', name='view', value='grouped' checked)
+            label(for='grouped') Grouped
+
+  script(src="http://d3js.org/d3.v4.min.js" charset="utf-8")
+  script(src="http://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.min.js")
+  script(src="http://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js") 
+  script(src='/js/demo.js')
+  

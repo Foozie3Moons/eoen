@@ -132,7 +132,7 @@ body > .grid {
   stroke-width: 0.1;
 }
 
-.ui.container.demo {
+.ui.push-top {
   margin-top: 5em;
 }
 
@@ -154,4 +154,8 @@ body > .grid {
     position: absolute;
     top: 10px;
     left: 0;
+}
+
+.ui.container {
+  padding: 1em;
 }

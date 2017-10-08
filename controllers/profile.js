@@ -6,35 +6,115 @@ var db = require('../models');
 router.get('/', isLoggedIn, function(req, res) {
   db.user.find({
     where: {
-      id: req.params.id
+      id: req.user.id
     }
   }).then(function(user) {
-    res.render('profile', {user: user});
+    res.render('profile/index', {user: user, active: 'home'});
   });
 });
 
 router.get('/account', isLoggedIn, function(req, res) {
-  res.send('hello');
+  db.user.find({
+    where: {
+      id: req.user.id
+    }
+  }).then(function(user) {
+    res.render('profile/account/show', {
+      user: user,
+      active: 'account'
+    });
+  });
 });
 
 router.get('/account/edit', isLoggedIn, function(req, res) {
-  res.send('let\'s change some stuff');
-})
+  db.user.find({
+    where: {
+      id: req.user.id
+    }
+  }).then(function(user) {
+    res.render('profile/account/edit', {
+      user: user,
+      active: 'account'
+    });
+  });
+});
 
 router.put('/account', isLoggedIn, function(req, res) {
-  res.send('I never knew that about you and we\'ll make note of that');
+  db.user.update({
+    name: req.body.name,
+    email: req.body.email,
+  }, {
+    where: {
+      id: req.user.id
+    },
+    returning: true
+  }).then(function(user) {
+    res.send('success');
+  });
 });
 
 router.delete('/account', isLoggedIn, function(req, res) {
-  res.send('goodbye forever');
+  db.user.destroy({
+    where: {
+      user: req.user.id
+    }
+  }).then(function(user) {
+    res.redirect('/');
+  });
 });
 
 router.get('/loans', isLoggedIn, function(req, res) {
-  res.send('heres your loans');
+  db.user.find({
+    where: {
+      id: req.user.id
+    }
+  }).then(function(user) {
+    res.render('loans/show', {
+      user: user,
+      active: 'loans'
+    })
+  });
+});
+
+router.get('/loans/new', isLoggedIn, function(req, res) {
+  db.user.find({
+    where: {
+      id: req.user.id
+    }
+  }).then(function(user) {
+    res.render('loans/new', {
+      user: user,
+      active: 'new'
+    });
+  });
 });
 
 router.post('/loans', isLoggedIn, function(req, res) {
-  res.send('oh, a new loan!')
+  db.loan.findOrCreate({
+    where: {
+      userId: req.user.idea,
+      initial_amount: req.body.amount,
+      down_payment: req.body.downPayment,
+      interest_rate: req.body.interestRate,
+      life_of_loan: req.body.lifeOfLoan,
+      payments_per_year: req.body.paymentsPerYear
+    },
+    defaults: {
+      userId: req.user.idea,
+      initial_amount: req.body.amount,
+      down_payment: req.body.downPayment,
+      interest_rate: req.body.interestRate,
+      life_of_loan: req.body.lifeOfLoan,
+      payments_per_year: req.body.paymentsPerYear
+    }
+  }).spread(function(loan, created) {
+    if (created) {
+      res.redirect('/profile/loan/' + loan.id)
+    } else {
+      req.flash('error', 'A loan with those parameters already exists');
+      res.redirect('/profile/loan/new');
+    }
+  });
 });
 
 router.get('/loans/:loanId', isLoggedIn, function(req, res) {
