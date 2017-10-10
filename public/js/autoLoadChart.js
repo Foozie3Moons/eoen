@@ -1,24 +1,26 @@
+var data = [];
+
 function toCurrency(float) {
   return parseFloat(parseFloat(Math.round(float * 100) / 100).toFixed(2));
 }
 function getPayment(rate, n, loanAmount) {
   return toCurrency(rate / (1 - Math.pow((1 + rate), -n)) * loanAmount);
 }
-var lifeOfLoan      = loan.lifeOfLoan,
+var lifeOfLoan      = parseFloat($('#lifeOfLoan').text()),
     n               = lifeOfLoan * 12,
-    downPayment     = loan.downPayment || 0,
-    loanAmount      = loan.loanAmount - downPayment,
-    apr             = loan.apr,
-    paymentsPerYear = loan.paymentsPerYear,
+    downPayment     = parseFloat($('#loan.downPayment').text()) || 0,
+    loanAmount      = parseFloat($('#loanAmount').text()) - downPayment,
+    apr             = parseFloat($('#apr').text()),
+    paymentsPerYear = parseFloat($('#paymentsPerYear').text()),
     mapr            = apr / 100 / paymentsPerYear,
     monthlyPayment  = getPayment(mapr, n, loanAmount),
     paymentNumber   = 1,
     year            = 1,
     yearlyInterest  = 0,
-    yearlyPrinciple = 0;
-    totalInterest = 0;
+    yearlyPrinciple = 0,
+    totalInterest = 0,
     totalPrinciple = 0;
-
+console.log(lifeOfLoan, n, downPayment, loanAmount, apr, paymentsPerYear)
 while (paymentNumber < n) {
   loanAmount = toCurrency(loanAmount);
   var monthlyInterest = loanAmount * mapr;
@@ -43,9 +45,10 @@ while (paymentNumber < n) {
     yearlyPrinciple = 0;
   }
 }
+console.log(data);
 
-$('.totalInterest').text(totalInterest);
-$('.totalPrinciple').text(totalPrinciple);
-$('.totalPaid').text(totalPrinciple + totalInterest);
+$('.totalInterest').text("$" + toCurrency(totalInterest));
+$('.totalPrinciple').text("$" + toCurrency(totalPrinciple));
+$('.totalPaid').text("$" + toCurrency(totalPrinciple + totalInterest));
 
 renderStacked(data);

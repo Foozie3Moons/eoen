@@ -13,26 +13,44 @@ block profile
           th Payments Per Year
           th Edit
       tbody
-          tr
-            td
-              h2.ui.center.aligned=loan.name
-            td.single.line
-              | $#{loan.loanAmount}
-            td
-              | $#{loan.downPayment}
-            td.right.aligned
-              | #{loan.apr}%
-            td
-              | #{loan.lifeOfLoan} years
-            td
-              | #{loan.paymentsPerYear}
-            td
-              a(href='/profile/loans/' + loanId + '/edit')
-                .ui.center.aligned
-                  i.edit.icon
+        tr
+          td
+            h2.ui.center.aligned=loan.name
+          td.right.aligned
+            | $
+            span#loanAmount #{loan.loanAmount}
+          td.right.aligned
+            | $
+            span#downPayment #{loan.downPayment}
+          td.right.aligned
+            span#apr #{loan.apr}
+            | %
+          td
+            span#lifeOfLoan #{loan.lifeOfLoan}
+            |  years
+          td
+            span#paymentsPerYear #{loan.paymentsPerYear}
+          td
+            a(href='/profile/loans/' + loanId + '/edit')
+              .ui.center.aligned
+                i.edit.icon
 
-    h1.ui.header Your Loan Visualization
-    .ui.grid#chart
+  
+    .ui.container.page-content
+      table.ui.celled.padded.table
+        thead
+          tr
+            th Total Interest
+            th Total Principle
+            th Total Paid
+        tbody
+          tr
+            td.totalInterest.ui.red
+            td.totalPrinciple.ui.green
+            td.totalPaid
+    .ui.container.page-content
+      h1.ui.header Let's View Your Loan
+      .ui.grid#chart
     .ui.stackable.raised.segment.grid.center.aligned.middle.aligned
       .six.wide.column
         form.ui.large.form#view
@@ -44,3 +62,10 @@ block profile
             .ui.radio.checkbox
               input#grouped(type='radio', name='view', value='grouped' checked)
               label(for='grouped') Grouped
+  
+  script(src="http://d3js.org/d3.v4.min.js" charset="utf-8")
+  script(src="http://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.min.js")
+  script(src="http://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js") 
+  script(src='/js/demo.js')
+  script(src='/js/autoLoadChart.js')
+    var data = loan;
