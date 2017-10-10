@@ -97,7 +97,7 @@ router.post('/loans', isLoggedIn, function(req, res) {
       userId: req.user.id,
       loanAmount: req.body.loanAmount,
       downPayment: req.body.downPayment,
-      apr: req.body.interestRate,
+      apr: req.body.apr,
       lifeOfLoan: req.body.lifeOfLoan,
       paymentsPerYear: req.body.paymentsPerYear
     },
@@ -106,7 +106,7 @@ router.post('/loans', isLoggedIn, function(req, res) {
       name: req.body.name,
       loanAmount: req.body.loanAmount,
       downPayment: req.body.downPayment,
-      apr: req.body.interestRate,
+      apr: req.body.apr,
       lifeOfLoan: req.body.lifeOfLoan,
       paymentsPerYear: req.body.paymentsPerYear
     }
@@ -125,7 +125,12 @@ router.get('/loans/:loanId', isLoggedIn, function(req, res) {
     where: {
       id: req.user.id
     },
-    include: [{model: db.loan, where: {id: req.params.loanId}}]
+    include: [{
+      model: db.loan,
+      where: {
+        id: req.params.loanId
+      }
+    }]
   }).then(function(user) {
     res.render('loans/loan/show', {
       user: user,
@@ -134,6 +139,26 @@ router.get('/loans/:loanId', isLoggedIn, function(req, res) {
     });
   });
 });
+
+router.get('/loans/:loanId/edit', isLoggedIn, function(req, res) {
+  db.user.find({
+    where: {
+      id: req.user.id
+    },
+    include: [{
+      model: db.loan,
+      where: {
+        id: req.params.loanId
+      }
+    }]
+  }).then(function(user) {
+    res.render('loans/loan/edit', {
+      user: user,
+      loan: user.loans[0],
+      active: 'loans'
+    })
+  })
+})
 
 router.put('/loans/:loanId', isLoggedIn, function(req, res) {
   res.send('we\'ll take are of that for you and update accordingly');

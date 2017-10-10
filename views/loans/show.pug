@@ -2,11 +2,41 @@ extends ../profile/index
 
 block profile
   .ui.container.page-content
-    h2 Let's show some jazz
+
+
     -if (user.loans.length > 0) {
-      each loan in user.loans
-        a(href='/profile/loans/' + loan.id)
-          h4=loan.name
+      h2 Your loans
+      table.ui.celled.padded.table
+        thead
+          tr
+            th.single.line Loan Name
+            th Loan Amount
+            th Down Payment
+            th APR
+            th Life of Loan
+            th Payments Per Year
+            th Edit
+        tbody
+          each loan in user.loans
+            tr
+              td.right.aligned
+                a.header(href='/profile/loans/' + loan.id)
+                  h2.ui.center.aligned=loan.name
+              td.single.line.right.aligned
+                | $#{loan.loanAmount}
+              td.right.aligned
+                | $#{loan.downPayment}
+              td.right.aligned
+                | #{loan.apr}%
+              td
+                | #{loan.lifeOfLoan} years
+              td
+                | #{loan.paymentsPerYear}
+              td
+                a(href='/profile/loans/' + loanId + '/edit')
+                  .ui.center.aligned
+                    i.edit.icon
+
     - } else {
       ui.stackable.grid
         .six.wide.column

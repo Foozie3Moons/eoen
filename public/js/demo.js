@@ -99,7 +99,6 @@ $('.submit').on('click', function() {
     .serializeArray()
     .map(function(x){submitted[x.name] = x.value;});
   var form = $('form#createLoan').children();
-  console.log(form);
 
   function toCurrency(float) {
     return parseFloat(parseFloat(Math.round(float * 100) / 100).toFixed(2));
@@ -121,9 +120,6 @@ $('.submit').on('click', function() {
       yearlyPrinciple = 0;
 
   for (let i = 0; i < form.length; i++) {
-    console.log(form[i]);
-    console.log($(form[i]).children('input'));
-    console.log($(form[i]).children('input').attr('id'))
     var id = $(form[i]).children('input').attr('id');
     switch (id) {
       case 'lifeOfLoan':
@@ -166,12 +162,10 @@ $('.submit').on('click', function() {
       yearlyPrinciple = 0;
     }
   }
-  console.log(data);
 
   renderStacked(data);
 });
 
-console.log(data);
 $('input[type=radio][name=view]').change(function() {
   if (this.value === 'grouped') {
     console.log(data);

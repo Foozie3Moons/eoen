@@ -2,5 +2,45 @@ extends ../../profile/index
 
 block profile
   .ui.container.page-content
-    h2=loan.name
-    p Some more content below
+    table.ui.celled.padded.table
+      thead
+        tr
+          th.single.line Loan Name
+          th Loan Amount
+          th Down Payment
+          th APR
+          th Life of Loan
+          th Payments Per Year
+          th Edit
+      tbody
+          tr
+            td
+              h2.ui.center.aligned=loan.name
+            td.single.line
+              | $#{loan.loanAmount}
+            td
+              | $#{loan.downPayment}
+            td.right.aligned
+              | #{loan.apr}%
+            td
+              | #{loan.lifeOfLoan} years
+            td
+              | #{loan.paymentsPerYear}
+            td
+              a(href='/profile/loans/' + loanId + '/edit')
+                .ui.center.aligned
+                  i.edit.icon
+
+    h1.ui.header Your Loan Visualization
+    .ui.grid#chart
+    .ui.stackable.raised.segment.grid.center.aligned.middle.aligned
+      .six.wide.column
+        form.ui.large.form#view
+          .field
+            .ui.radio.checkbox
+              input#stacked(type='radio', name='view' value='stacked')
+              label(for='stacked') Stacked
+          .field
+            .ui.radio.checkbox
+              input#grouped(type='radio', name='view', value='grouped' checked)
+              label(for='grouped') Grouped
