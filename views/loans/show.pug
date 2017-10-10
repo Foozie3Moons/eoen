@@ -1,4 +1,18 @@
 extends ../profile/index
 
 block profile
-  h2 Let's show some jazz
+  .ui.container.page-content
+    h2 Let's show some jazz
+    -if (user.loans.length > 0) {
+      each loan in user.loans
+        a(href='/loans/' loan.id)
+        h4=loan.name
+    - } else {
+      ui.stackable.grid
+        .six.wide.column
+          .row
+            h4 You currently do not have any loans.
+          .row
+            a.ui.small.orange.button(href='/profile/loans/new') 
+              | Add a New Loan
+    - }

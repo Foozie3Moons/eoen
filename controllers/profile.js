@@ -11,6 +11,7 @@ router.get('/', isLoggedIn, function(req, res) {
   }).then(function(user) {
     res.render('profile/index', {user: user, active: 'home'});
   });
+  // res.render('profile/index');
 });
 
 router.get('/account', isLoggedIn, function(req, res) {
@@ -67,7 +68,8 @@ router.get('/loans', isLoggedIn, function(req, res) {
   db.user.find({
     where: {
       id: req.user.id
-    }
+    },
+    include: [db.loan]
   }).then(function(user) {
     res.render('loans/show', {
       user: user,

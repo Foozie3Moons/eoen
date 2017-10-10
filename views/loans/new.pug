@@ -31,23 +31,42 @@ block profile
           label(for='apr') APR
           .ui.left.icon.input
             i.percent.icon
-            input#interestRate(type='number', name='apr', placeholder='0.0' value='4.5')
+            input#apr(type='number', name='apr', placeholder='0.0' value='4.5')
 
         .ui.fluid.large.orange.submit.button(type='submit') Submit 
         include ../partials/alerts
-    .row.horizontal.stripe
-      h1.ui.header Let's View Your Loan
-      #chart.ui.grid
-    .ui.raised.segment
-      form.ui.large.form#view
-        .field
-          .ui.radio.checkbox
-            input#stacked(type='radio', name='view' value='stacked')
-            label(for='stacked') Stacked
-        .field
-          .ui.radio.checkbox
-            input#grouped(type='radio', name='view', value='grouped' checked)
-            label(for='grouped') Grouped
+      .ui.container.page-content
+        h1.ui.header Let's View Your Loan
+        #chart.ui.grid
+      .ui.stackable.raised.segment.grid.center.aligned.middle.aligned
+        .six.wide.column
+          form.ui.large.form#view
+            .field
+              .ui.radio.checkbox
+                input#stacked(type='radio', name='view' value='stacked')
+                label(for='stacked') Stacked
+            .field
+              .ui.radio.checkbox
+                input#grouped(type='radio', name='view', value='grouped' checked)
+                label(for='grouped') Grouped
+        .six.wide.column
+          form.ui.large.form#createLoan(method='POST', action='/profile/loans')
+            .field
+                input#loanAmount(type='number', name='loanAmount', hidden)
+            .field
+                input#downPayment(type='number', name='downPayment', hidden)
+            .field
+                input#lifeOfLoan(type='number', name='lifeOfLoan', hidden) 
+            .field
+                input#paymentsPerYear(type='number', name='paymentsPerYear', hidden)
+            .field
+              input#apr(type='number', name='apr', hidden)
+            .field
+              label(for='name') Name Your Loan
+              .ui.left.icon.input
+                i.browser.icon
+                input#loanName(type='text', name='name', placeholder='Loan Name')            
+            input.ui.fluid.large.orange.submit.button(type='submit', value='Add Loan to List') 
 
   script(src="http://d3js.org/d3.v4.min.js" charset="utf-8")
   script(src="http://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.min.js")
