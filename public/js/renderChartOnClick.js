@@ -18,7 +18,7 @@ $('.submit').on('click', function() {
       downPayment     = submitted.downPayment || 0,
       loanAmount      = submitted.loanAmount - downPayment,
       apr             = submitted.apr,
-      paymentsPerYear = submitted.paymentsPerYear,
+      paymentsPerYear = submitted.paymentsPerYear || 12,
       mapr            = apr / 100 / paymentsPerYear,
       monthlyPayment  = getPayment(mapr, n, loanAmount),
       paymentNumber   = 1,
