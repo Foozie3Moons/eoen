@@ -94,33 +94,45 @@ router.get('/loans/new', isLoggedIn, function(req, res) {
 router.post('/loans', isLoggedIn, function(req, res) {
   db.loan.findOrCreate({
     where: {
-      userId: req.user.idea,
-      initial_amount: req.body.amount,
-      down_payment: req.body.downPayment,
-      interest_rate: req.body.interestRate,
-      life_of_loan: req.body.lifeOfLoan,
-      payments_per_year: req.body.paymentsPerYear
+      userId: req.user.id,
+      loanAmount: req.body.loanAmount,
+      downPayment: req.body.downPayment,
+      apr: req.body.interestRate,
+      lifeOfLoan: req.body.lifeOfLoan,
+      paymentsPerYear: req.body.paymentsPerYear
     },
     defaults: {
-      userId: req.user.idea,
-      initial_amount: req.body.amount,
-      down_payment: req.body.downPayment,
-      interest_rate: req.body.interestRate,
-      life_of_loan: req.body.lifeOfLoan,
-      payments_per_year: req.body.paymentsPerYear
+      userId: req.user.id,
+      name: req.body.name,
+      loanAmount: req.body.loanAmount,
+      downPayment: req.body.downPayment,
+      apr: req.body.interestRate,
+      lifeOfLoan: req.body.lifeOfLoan,
+      paymentsPerYear: req.body.paymentsPerYear
     }
   }).spread(function(loan, created) {
     if (created) {
-      res.redirect('/profile/loan/' + loan.id)
+      res.redirect('/profile/loans/' + loan.id)
     } else {
       req.flash('error', 'A loan with those parameters already exists');
-      res.redirect('/profile/loan/new');
+      res.redirect('/profile/loans/new');
     }
   });
 });
 
 router.get('/loans/:loanId', isLoggedIn, function(req, res) {
-  res.send('heres your loan');
+  db.user.find({
+    where: {
+      id: req.user.id
+    },
+    include: [{model: db.loan, where: {id: req.params.loanId}}]
+  }).then(function(user) {
+    res.render('loans/loan/show', {
+      user: user,
+      loan: user.loans[0],
+      active: 'loans'
+    });
+  });
 });
 
 router.put('/loans/:loanId', isLoggedIn, function(req, res) {

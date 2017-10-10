@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         msg: 'Loan amount must be less than 99999999'
       }
     },
-    downPayemnt: DataTypes.DOUBLE,
+    downPayment: DataTypes.DOUBLE,
     apr: DataTypes.DOUBLE,
     lifeOfLoan: DataTypes.INTEGER,
     paymentsPerYear: DataTypes.DOUBLE,

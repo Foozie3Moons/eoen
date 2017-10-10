@@ -14,7 +14,7 @@ module.exports = {
       loanAmount: {
         type: Sequelize.DOUBLE
       },
-      downPayemnt: {
+      downPayment: {
         type: Sequelize.DOUBLE
       },
       apr: {

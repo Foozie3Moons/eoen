@@ -5,8 +5,8 @@ block profile
     h2 Let's show some jazz
     -if (user.loans.length > 0) {
       each loan in user.loans
-        a(href='/loans/' loan.id)
-        h4=loan.name
+        a(href='/profile/loans/' + loan.id)
+          h4=loan.name
     - } else {
       ui.stackable.grid
         .six.wide.column
