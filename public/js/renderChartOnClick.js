@@ -47,7 +47,7 @@ $('.submit').on('click', function() {
     }
   }
 
-  while (paymentNumber < n) {
+  while (paymentNumber !== n) {
     loanAmount = toCurrency(loanAmount);
     var monthlyInterest = loanAmount * mapr;
     monthlyInterest = toCurrency(monthlyInterest);

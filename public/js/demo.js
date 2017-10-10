@@ -9,7 +9,7 @@ d3.select("div#chart")
       .classed("svg-content-responsive", true);
 
 var svg = d3.select("svg"),
-    margin = {top: 20, right: 20, bottom: 30, left: 40},
+    margin = {top: 50, right: 50, bottom: 50, left: 50},
     width = parseInt(d3.select('.svg-content-responsive').style('width')) - margin.left - margin.right,
     height = parseInt(d3.select('.svg-content-responsive').style('height')) - margin.top - margin.bottom;
 
