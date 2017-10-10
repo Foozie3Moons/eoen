@@ -9,9 +9,9 @@ router.get('/', isLoggedIn, function(req, res) {
       id: req.user.id
     }
   }).then(function(user) {
-    res.render('profile/index', {user: user, active: 'home'});
+    res.redirect('/profile/loans');
+    // res.render('profile/index', {user: user, active: 'home'});
   });
-  // res.render('profile/index');
 });
 
 router.get('/account', isLoggedIn, function(req, res) {
@@ -165,7 +165,13 @@ router.put('/loans/:loanId', isLoggedIn, function(req, res) {
 });
 
 router.delete('/loans/:loanId', isLoggedIn, function(req, res) {
-  res.send('good riddance!');
+  db.loan.destroy({
+    where: {
+      id: req.params.loanId
+    }
+  }).then(function(loan) {
+    res.send("success");
+  })
 });
 
 module.exports = router;
