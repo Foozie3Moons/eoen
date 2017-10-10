@@ -2,6 +2,57 @@ extends ../../profile/index
 
 block profile
   .ui.container.page-content
-    h2=loan.name
-    p 
-    p Some more content below
+    h2 Edit #{loan.name}
+    form.ui.large.form.put(action='/profile/loans/' + loan.id)
+      .ui
+        .two.fields
+          .field
+            label(for='loanAmount') Loan Amount
+            .ui.left.icon.input
+              i.dollar.icon
+              input#loanAmount(type='number', name='loanAmount', placeholder='Loan Amount' value='478350')
+          .field
+            label(for='downPayment') Down Payment
+            .ui.left.icon.input
+              i.dollar.icon
+              input#downPayment(type='number', name='downPayment', placeholder='Down Payment' value='0')
+        .two.fields
+          .field
+            label(for='lifeOfLoan') Life of Loan
+            .ui.left.icon.input
+              i.calendar.icon
+              input#lifeOfLoan(type='number', name='lifeOfLoan', placeholder='Life of Loan' value='30') 
+          .field
+            label(for='paymentsPerYear') Payments Per Year
+            .ui.left.icon.input
+              i.calendar.icon
+              input#paymentsPerYear(type='number', name='paymentsPerYear', placeholder='Payments Per Year' value='12')
+        .field
+          label(for='apr') APR
+          .ui.left.icon.input
+            i.percent.icon
+            input#apr(type='number', name='apr', placeholder='0.0' value='4.5')
+        .field
+          label(for='name') Name Your Loan
+          .ui.left.icon.input
+            i.browser.icon
+            input#loanName(type='text', name='name', value=loan.name)            
+
+        input.ui.fluid.large.orange.submit.button(type='submit' value='Submit')
+        include ../../partials/alerts
+  
+  script.
+    $('.put').on('submit', function(e) {
+      e.preventDefault();
+      var element = $(this);
+      var url = element.attr('action');
+      var data = element.serialize();
+      console.log(url);
+      $.ajax({
+        method: 'PUT',
+        url: url,
+        data: data
+      }).done(function(data) {
+        window.location = '/profile/loans';
+      });
+    });

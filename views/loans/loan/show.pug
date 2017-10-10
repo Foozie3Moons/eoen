@@ -32,7 +32,7 @@ block profile
           td
             span#paymentsPerYear #{loan.paymentsPerYear}
           td
-            a(href='/profile/loans/' + loanId + '/edit')
+            a(href='/profile/loans/' + loan.id + '/edit')
               .ui.center.aligned
                 i.edit.icon
           td
@@ -87,3 +87,7 @@ block profile
         window.location = '/profile/loans';
       });
     });
+    $('.put').on('click', function(e) {
+      e.preventDefault();
+      var
+    })

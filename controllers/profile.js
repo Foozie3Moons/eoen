@@ -161,8 +161,20 @@ router.get('/loans/:loanId/edit', isLoggedIn, function(req, res) {
 })
 
 router.put('/loans/:loanId', isLoggedIn, function(req, res) {
-  res.send('we\'ll take are of that for you and update accordingly');
-});
+  db.loan.update({
+    name: req.body.name,
+    loanAmount: req.body.loanAmount,
+    downPayment: req.body.downPayment,
+    apr: req.body.apr,
+    lifeOfLoan: req.body.lifeOfLoan,
+    paymentsPerYear: req.body.paymentsPerYear
+  }, {
+    where: {
+      id: req.params.loanId
+    }
+  }).then(function(loan) {
+    res.send("success");
+  })});
 
 router.delete('/loans/:loanId', isLoggedIn, function(req, res) {
   db.loan.destroy({
