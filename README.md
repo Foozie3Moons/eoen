@@ -50,24 +50,24 @@ Include sign up/log in functionality, with hashed passwords & an authorization f
 
 ## Routes
 
-  | Verb | URL | Purpose | Description
+  | Verb | URL | Purpose | Status |
   |---|---|---|---|
-  | GET | / | Home Page | Overview of website / standard home page |
-  | GET | /auth/login | Login Page | Login page / modal |
-  | GET | /auth/signup | Signup Page | Form where users can enter data to sign up for the service |
-  | POST | /auth/login | Posts login information | |
-  | POST | /auth/signup | Posts signup information | |
-  | GET | /profile | Gets user profile page | User's dashboard |
-  | GET | /profile/account | Shows user account settings | Contains how to update their user information |
-  | GET | /profile/account | Displays user's account information | |
-  | GET | /profile/account/edit | Edit page for account settings | Contains a form to edit/update user information |
-  | PUT | /profile/account | Updates user account information and redirects to /profile/account | PUTS user information from the /profile/account/ and updates database |
-  | DELETE | /profile/account | Deletes the user's account forever and redirects to / | Purpose explains it pretty well |
-  | GET | /profile/loans | Get all loan meta information | Display basic link information for all loans including a small description of that loan, like tags (personal, mortgage, etc) |
-  | GET | /profile/loans/:loanId | Get individual loan information, including loan visualization | Display advanced information for all loans including a small description of that loan, like tags (personal, mortgage, etc) as well as the various visualizations the user can have |
-  | POST | /profile/loans | Posts loan information to server, creating a loan in the database and redirects to the created loan instance /profile/loans/:loanId | |
-  | PUT | /profile/loans/:loanId | Updates existing mortgage details and redirects to the same /profile/loans/:loanId | |
-  | DELETE | /profile/loans/:loanId | Deletes the loan from the database and redirects to /profile/loans | |
+  | GET | / | Enticing home page | Operational |
+  | GET | /auth/login | Login page / modal | Operational |
+  | GET | /auth/signup | Signup page / modal | Operational |
+  | POST | /auth/login | Posts login information | Operational |
+  | POST | /auth/signup | Posts signup information | Operational |
+  | GET | /profile | Gets renders user's loans via redirect to /profile/loans |  Operational |
+  | GET | /profile/account | Shows user account settings | Hold |
+  | GET | /profile/account | Displays user's account information | Hold |
+  | GET | /profile/account/edit | Edit page for account settings | Hold |
+  | PUT | /profile/account | Updates user account information and redirects to `/profile/account` | Hold |
+  | DELETE | /profile/account | Deletes the user's account forever and redirects to `/` | Hold |
+  | GET | /profile/loans | Display basic link information for all loans including a small description of that loan, like tags (personal, mortgage, etc) | Operational |
+  | GET | /profile/loans/:loanId | Display advanced information for all loans including a small description of that loan, like tags (personal, mortgage, etc) as well as the various visualizations the user can have | Operational |
+  | POST | /profile/loans | Posts loan information to server, creating a loan in the database and redirects to the created loan instance /profile/loans/:loanId | Operational |
+  | PUT | /profile/loans/:loanId | Updates existing mortgage details and redirects to the same /profile/loans/:loanId | Operational |
+  | DELETE | /profile/loans/:loanId | Deletes the loan from the database and redirects to /profile/loans | Operational |
 
 ## API
 
