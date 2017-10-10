@@ -34,8 +34,10 @@ The MVP of the project is to have a fully functional D3 visualization demo that 
 Include sign up/log in functionality, with hashed passwords & an authorization flow
   - User model with authentication using passport
   - Loan model for storig users loan details and displaying charts to visualize their loan
-- [x] Incorporate at least one API. Examples include Yelp, Tumblr, Facebook, and others on Mashape.
+- [ ] Incorporate at least one API. Examples include Yelp, Tumblr, Facebook, and others on Mashape.
   - Using Quandl API (see below)
+  - **Status**: On Hold
+    - Having troubles sending API data from front-end to static javascript files, probably need to move d3 viz to the back-end
 - [x] Have complete RESTful routes for at least one of your resources with GET, POST, PUT, and DELETE
   - See complete routing list below
 - [x] Utilize an ORM to create a database table structure and interact with your relationally-stored data
@@ -70,6 +72,8 @@ Include sign up/log in functionality, with hashed passwords & an authorization f
   | DELETE | /profile/loans/:loanId | Deletes the loan from the database and redirects to /profile/loans | Operational |
 
 ## API
+
+**Status:** On Hold
 
 Consuming an api through Quandl, a premier data provider for almost everything. The API requests data from Quandl on Freddy Mac's 30 year mortgage interest rates, dating back through 1970.
 
