@@ -11,9 +11,7 @@ d3.select("div#chart")
 var svg = d3.select("svg"),
     margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = parseInt(d3.select('.svg-content-responsive').style('width')) - margin.left - margin.right,
-    height = parseInt(d3.select('.svg-content-responsive').style('height')) - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-      .attr('width', width);
+    height = parseInt(d3.select('.svg-content-responsive').style('height')) - margin.top - margin.bottom;
 
 var x = d3.scaleBand()
     .rangeRound([0, width])
@@ -93,9 +91,12 @@ var z = d3.scaleOrdinal()
 //       .text(function(d) { return d; });
 // });
 
-function renderStacked(csv) {
+function renderStacked(data) {
 
   var keys = ['balance', 'interest', 'principle'];
+
+  var g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    .attr('width', width);
 
   x.domain(data.map(function(d) { return d.year; }));
   y.domain([0, d3.max(data, function(d) { return d.balance; })]).nice();
@@ -112,7 +113,8 @@ function renderStacked(csv) {
       .attr("x", function(d) { return x(d.data.year); })
       .attr("y", function(d) { return y(d[1]); })
       .attr("height", function(d) { return y(d[0]) - y(d[1]); })
-      .attr("width", x.bandwidth());
+      .attr("width", x.bandwidth())
+    .exit().remove();
 
   g.append("g")
       .attr("class", "axis")
@@ -152,6 +154,8 @@ function renderStacked(csv) {
       .attr("y", 9.5)
       .attr("dy", "0.32em")
       .text(function(d) { return d; });
+
+  legend.exit().remove();
 }
 
 var data = [];
@@ -167,7 +171,7 @@ $('.submit').on('click', function() {
   }
   var lifeOfLoan      = submitted.lifeOfLoan,
       n               = lifeOfLoan * 12,
-      downPayment     = submitted.downPayment,
+      downPayment     = submitted.downPayment || 0,
       loanAmount      = submitted.loanAmount - downPayment,
       apr             = submitted.apr,
       mapr            = apr / 100 / 12,

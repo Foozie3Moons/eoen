@@ -27,37 +27,40 @@ html.mdc-typography(lang='en')
 
       // Page Contents
 
-      .ui.inverted.vertical.masthead.center.aligned.segment
-        .ui.container
-          .ui.large.secondary.inverted.pointing.menu
-            a.toc.item
-              i.sidebar.icon
-            a.item.active(href='/') Home
-            a.item(href='/demo') Demo
-            .right.item
-              a.ui.inverted.button(href='/auth/login') Log in
-              a.ui.inverted.button(href='/auth/signup') Sign Up
-
-        .ui.text.container
-          h1.ui.inverted.header
-            span.primary 
-              | EOEN 
-            span 
-              | Mortgage
-          h2 
-            span 
-              | Mor
-            span.primary 
-              | E
-            span 
-              | t
-            span.primary 
-              | O EN
-            span 
-              | gage
-          a.ui.huge.primary.button(href='/auth/signup')
-            | Get Started 
-            i.right.arrow.icon
+      .ui.inverted.vertical.masthead.center.aligned.segment.relative
+        .ui.container.absolute.overlay-bottom
+          .svg-container
+            svg#hex
+        .ui.container.absolute.overlay-top
+          .ui.container
+            .ui.large.secondary.inverted.pointing.menu
+              a.toc.item
+                i.sidebar.icon
+              a.item.active(href='/') Home
+              a.item(href='/demo') Demo
+              .right.item
+                a.ui.inverted.button(href='/auth/login') Log in
+                a.ui.inverted.button(href='/auth/signup') Sign Up
+          .ui.text.container
+            h1.ui.inverted.header
+              span.primary 
+                | EOEN 
+              span 
+                | Mortgage
+            h2 
+              span 
+                | Mor
+              span.primary 
+                | E
+              span 
+                | t
+              span.primary 
+                | O EN
+              span 
+                | gage
+            a.ui.huge.primary.button(href='/auth/signup')
+              | Get Started 
+              i.right.arrow.icon
       .ui.vertical.stripe.segment
         .ui.center.aligned.stackable.grid.container
           .row
@@ -102,3 +105,6 @@ html.mdc-typography(lang='en')
                 | Extra space for a call to action inside the footer that could help re-engage users.
 
     include partials/scripts
+    script(src="http://d3js.org/d3.v4.min.js" charset="utf-8")
+    script(src="https://d3js.org/d3-hexbin.v0.2.min.js")
+    script(src='/js/grid.js')

@@ -2,7 +2,7 @@ extends ../profile/index
 
 block profile
   .ui.container
-    h1.ui.orange.header Your Loan Detials
+    h1.ui.header Your Loan Detials
     form.ui.large.form#loan
       .ui
         .two.fields
@@ -36,9 +36,9 @@ block profile
         .ui.fluid.large.orange.submit.button(type='submit') Submit 
         include ../partials/alerts
     .row.horizontal.stripe
-      h1.ui.center.aligned.top.aligned Let's View Your Loan
-      #chart.ui.grid.center.aligned.middle.aligned
-    .ui.segment
+      h1.ui.header Let's View Your Loan
+      #chart.ui.grid
+    .ui.raised.segment
       form.ui.large.form#view
         .field
           .ui.radio.checkbox

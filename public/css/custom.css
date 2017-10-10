@@ -143,10 +143,10 @@ body > .grid {
 
 .svg-container {
     display: inline-block;
-    position: relative;
     width: 100%;
     /*padding-bottom: 100%; /* aspect ratio */*/
     vertical-align: top;
+    padding: 0;
     overflow: hidden;
 }
 .svg-content {
@@ -157,5 +157,42 @@ body > .grid {
 }
 
 .ui.container {
-  padding: 1em;
+  padding: 0;
+  margin: 0;
+}
+
+.ui.header {
+  text-align: center;
+}
+
+.hexagon {
+  stroke: #000;
+  stroke-width: 0.1em;
+}
+
+#hex {
+  width: 100%;
+  height: 100%;
+}
+
+#hex * {
+  opacity: .9
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.overlay-top {
+  z-index: 50;
+}
+
+.overlay-bottom {
+  z-index: 49;
 }

@@ -12,7 +12,7 @@
           | EOEN 
         span(style='color:#000000')
           | Mortgage
-      a.item(href='/') Home
+      a.item(href='/' class=active==='index' ? 'active' : '') Home
       a.item(href='/demo' class=currentPage === 'demo' ? 'active' : '') Demo
     -}
     -if (loggedIn) {

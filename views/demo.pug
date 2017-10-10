@@ -1,9 +1,28 @@
 extends layout
     
 block content
-  .ui.middle.aligned.center.aligned.container.demo
-    h1.ui.center.aligned.top.aligned D3 Chart Demonstration
-    #chart.ui.raised.segment.grid.center.aligned.middle.aligned
+  .ui.middle.aligned.container.push-top
+    form.ui.large.form#loan
+      .ui.raised.segment
+        h1.ui.header D3 Chart Demonstration
+        .field
+          label(for='loanAmount') Loan Amount
+          .ui.left.icon.input
+            i.dollar.icon
+            input#loanAmount(type='number', name='loanAmount', placeholder='Loan Amount' value='478350')
+        .field
+          label(for='lifeOfLoan') Life of Loan
+          .ui.left.icon.input
+            i.calendar.icon
+            input#lifeOfLoan(type='number', name='lifeOfLoan', placeholder='Life of Loan' value='30') 
+        .field
+          label(for='apr') APR
+          .ui.left.icon.input
+            i.percent.icon
+            input#interestRate(type='number', name='apr', placeholder='0.0' value='4.5')
+        .ui.fluid.large.orange.submit.button(type='submit') Submit
+        include partials/alerts
+    #chart.ui.raised.segment.grid
       form.ui.large.form#view
         .field
           .ui.radio.checkbox
@@ -13,27 +32,8 @@ block content
           .ui.radio.checkbox
             input#grouped(type='radio', name='view', value='grouped' checked)
             label(for='grouped') Grouped
-    form.ui.large.form#loan
-      .ui.raised.segment
-        .field
-          .ui.left.icon.input
-            i.dollar.icon
-            input#loanAmount(type='number', name='loanAmount', placeholder='Loan Amount' value='478350')
-        .field
-          .ui.left.icon.input
-            i.percent.icon
-            input#interestRate(type='number', name='apr', placeholder='0.0' value='4.5')
-        .field
-          .ui.left.icon.input
-            i.dollar.icon
-            input#downPayment(type='number', name='downPayment', placeholder='Down Payment' value='0')
-        .field
-          .ui.left.icon.input
-            i.calendar.icon
-            input#lifeOfLoan(type='number', name='lifeOfLoan', placeholder='Life of Loan' value='30') 
-        .ui.fluid.large.orange.submit.button(type='submit') Submit 
-        include partials/alerts
-
+  
+  include partials/scripts
   script(src="http://d3js.org/d3.v4.min.js" charset="utf-8")
   script(src="http://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.min.js")
   script(src="http://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js") 
