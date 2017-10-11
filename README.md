@@ -79,6 +79,11 @@ Consuming an api through Quandl, a premier data provider for almost everything. 
 
 Website[https://www.quandil.com]
 
+## D3 charts
+
+**Please Note**:
+Charts are intended to be scalable but are currently not. The scaling for full screen makes them too big (overflowing the container), while mobile makes them too tiny. This is an issue that is on the front burner for fixing.
+
 ## Technologies Used
 
 - Node.js

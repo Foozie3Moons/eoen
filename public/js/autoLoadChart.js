@@ -47,6 +47,7 @@ while (paymentNumber < n) {
 }
 console.log(data);
 
+$('.monthlyPayment').text("$" + toCurrency(monthlyPayment));
 $('.totalInterest').text("$" + toCurrency(totalInterest));
 $('.totalPrinciple').text("$" + toCurrency(totalPrinciple));
 $('.totalPaid').text("$" + toCurrency(totalPrinciple + totalInterest));

@@ -39,8 +39,6 @@ block profile
             a.delete(data-confirm="Are you sure?" data-method="delete" href="/profile/loans/"+loan.id rel="nofollow")
               .ui.center.aligned    
                 i.red.window.close.icon
-
-  
     .ui.container.page-content
       table.ui.celled.padded.table
         thead
@@ -48,11 +46,13 @@ block profile
             th Total Interest
             th Total Principle
             th Total Paid
+            th Monthly Payment
         tbody
           tr
-            td.totalInterest.ui.red
-            td.totalPrinciple.ui.green
+            td.totalInterest.ui.red.text
+            td.totalPrinciple.ui.green.text
             td.totalPaid
+            td.monthlyPayment
     .ui.container.page-content
       h1.ui.header Let's View Your Loan
       .ui.grid#chart
