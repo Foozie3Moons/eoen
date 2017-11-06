@@ -1,6 +1,6 @@
-# Eoen Mortgage Solutions
+# Eoen Loan Calculation
 
-The intention of Eoen is to provide a quality service for visualizing mortgage data. Eventually this will be broadened to be all loan data, not just mortgage data.
+Eoen is a pet project of mine. There's a lot of mortgage calculators out there but there's not a lot of free ones that calculate the true cost of a mortgage. So the intention of Eoen is to provide a quality service for visualizing mortgage data. In its current state, it's just a simple fixed rate loan calculator but the intention is to expand the functionality to meet our vision of what this app is supposed to be.
 
 The MVP of the project is to have a fully functional D3 visualization demo that users can use to simulate the basic functionality of a mortgage. When the user signs up for an account, they will be able to save, update, and delete their mortgage details.
 
