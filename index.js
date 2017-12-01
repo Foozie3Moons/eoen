@@ -52,11 +52,11 @@ app.get('/*', function(req, res, next){
 });
 
 app.get('/', function(req, res) {
-  request.get("https://www.quandl.com/api/v3/datasets/FMAC/30US.json?api_key="
-      + process.env.QUANDL_API_KEY, function(error, response, body) {
-    console.log(body);
-    res.render('index.pug', {data: body, session: req.session});
-  });
+  // request.get("https://www.quandl.com/api/v3/datasets/FMAC/30US.json?api_key="
+  //     + process.env.QUANDL_API_KEY, function(error, response, body) {
+  //   console.log(body);
+  res.render('index.pug', {session: req.session});
+  // });
 });
 
 app.get('/demo', function(req, res) {

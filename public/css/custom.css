@@ -2,6 +2,10 @@
   display: none;
 }
 
+.masthead {
+  height: 100vh;
+}
+
 .masthead.segment {
   min-height: 700px;
   padding: 1em 0em;

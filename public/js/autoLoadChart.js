@@ -20,7 +20,7 @@ var lifeOfLoan      = parseFloat($('#lifeOfLoan').text()),
     yearlyPrinciple = 0,
     totalInterest = 0,
     totalPrinciple = 0;
-console.log(lifeOfLoan, n, downPayment, loanAmount, apr, paymentsPerYear)
+
 while (paymentNumber < n) {
   loanAmount = toCurrency(loanAmount);
   var monthlyInterest = loanAmount * mapr;

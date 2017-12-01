@@ -7,21 +7,23 @@ $('.submit').on('click', function() {
     .map(function(x){submitted[x.name] = x.value;});
   var form = $('form#createLoan').children();
 
-  function toCurrency(float) {
-    return parseFloat(parseFloat(Math.round(float * 100) / 100).toFixed(2));
+  function toCents(currency) {
+    return Math.floor(currency * 100)
+  }
+  function toDollars(currency) {
+    return Math.floor(currency / 100)
   }
   function getPayment(rate, n, loanAmount) {
-    return toCurrency(rate / (1 - Math.pow((1 + rate), -n)) * loanAmount);
+    return toCents(rate / (1 - Math.pow((1 + rate), -n)) * loanAmount);
   }
   var lifeOfLoan      = submitted.lifeOfLoan,
-      n               = lifeOfLoan * 12,
-      downPayment     = submitted.downPayment || 0,
-      loanAmount      = submitted.loanAmount - downPayment,
+      totalPayments   = lifeOfLoan * 12,
+      downPayment     = toCents(submitted.downPayment) || 0,
+      loanAmount      = toCents(submitted.loanAmount) - downPayment,
       apr             = submitted.apr,
       paymentsPerYear = submitted.paymentsPerYear || 12,
       mapr            = apr / 100 / paymentsPerYear,
       monthlyPayment  = getPayment(mapr, n, loanAmount),
-      paymentNumber   = 0,
       year            = 1,
       yearlyInterest  = 0,
       yearlyPrinciple = 0;
@@ -47,10 +49,8 @@ $('.submit').on('click', function() {
     }
   }
 
-  while (paymentNumber !== n) {
-    loanAmount = toCurrency(loanAmount);
-    var monthlyInterest = loanAmount * mapr;
-    monthlyInterest = toCurrency(monthlyInterest);
+  for (var paymentNumber = 1; paymentNumber < totalPayments; paymentNumber++) {
+    var monthlyInterest = Math.floor(loanAmount * mapr);
     var monthlyPrinciple = monthlyPayment - monthlyInterest;
     yearlyInterest += monthlyInterest;
     yearlyPrinciple += monthlyPrinciple;
@@ -64,7 +64,6 @@ $('.submit').on('click', function() {
         interest: yearlyInterest,
         principle: yearlyPrinciple
       });
-      year += 1;
       yearlyInterest = 0;
       yearlyPrinciple = 0;
     }
